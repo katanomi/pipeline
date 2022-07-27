@@ -40,6 +40,7 @@ import (
 	"k8s.io/utils/strings/slices"
 	"knative.dev/pkg/changeset"
 	"knative.dev/pkg/kmeta"
+	// "k8s.io/apimachinery/pkg/api/resource"
 )
 
 const (
@@ -604,6 +605,16 @@ func createResultsSidecar(taskSpec v1.TaskSpec, image string, setSecurityContext
 		Name:    pipeline.ReservedResultsSidecarName,
 		Image:   image,
 		Command: command,
+		// ComputeResources: corev1.ResourceRequirements{
+		// 	Limits: corev1.ResourceList{
+		// 		corev1.ResourceCPU:    resource.MustParse("50m"),
+		// 		corev1.ResourceMemory: resource.MustParse("64Mi"),
+		// 	},
+		// 	Requests: corev1.ResourceList{
+		// 		corev1.ResourceCPU:    resource.MustParse("50m"),
+		// 		corev1.ResourceMemory: resource.MustParse("64Mi"),
+		// 	},
+		// },
 	}
 	securityContext := linuxSecurityContext
 	if windows {
