@@ -212,10 +212,10 @@ func extractVariablesFromString(s, prefix string) ([]string, bool, string) {
 			// Invalid Examples:
 			//  - <prefix>.foo.bar.baz....
 			if j == 0 && strings.Contains(val, ".") {
-				if len(strings.Split(val, ".")) > 2 {
-					errString = fmt.Sprintf(`Invalid referencing of parameters in "%s"! Only two dot-separated components after the prefix "%s" are allowed.`, s, prefix)
-					return vars, true, errString
-				}
+				// if len(strings.Split(val, ".")) > 2 {
+				// 	errString = fmt.Sprintf(`Invalid referencing of parameters in "%s"! Only two dot-separated components after the prefix "%s" are allowed.`, s, prefix)
+				// 	return vars, true, errString
+				// }
 				vars[i] = strings.SplitN(val, ".", 2)[0]
 				break
 			}
