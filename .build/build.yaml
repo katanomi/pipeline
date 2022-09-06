@@ -1,8 +1,15 @@
 kind: Build
 apiVersion: builds.katanomi.dev/v1alpha1
 spec:
+  runTemplate:
+    spec:
+      workspaces:
+      - name: cache
+        persistentVolumeClaim:
+          claimName: build-cache
   workspaces:
   - name: source
+  - name: cache
   tasks:
     ## read oss version
     - name: oss-version
@@ -15,6 +22,32 @@ spec:
       workspaces:
       - name: source
         workspace: source
+    - name: golang-test
+      taskRef:
+        kind: ClusterTask
+        name: alauda-golang-build-test
+      runAfter:
+        - oss-version
+      params:
+      - name: test
+        value: |
+          export GOPROXY=https://build-nexus.alauda.cn/repository/golang/,https://goproxy.cn,direct
+          export CGO_ENABLED=0
+          export GONOSUMDB=*
+          go mod download
+
+          temp_cover_file=$(mktemp -d)/profile.cov
+
+          go test -v -coverprofile ${temp_cover_file} ./...
+          cp ${temp_cover_file} profile.cov
+      - name: build
+        value: |
+          echo "do nothing"
+      workspaces:
+        - name: source
+          workspace: source
+        - name: cache
+          workspace: cache
     ## ko publish image
     - name: build-entrypoint
       taskRef:
@@ -23,6 +56,8 @@ spec:
       workspaces:
         - name: source
           workspace: source
+      runAfter:
+        - oss-version
       params:
         - name: verbose
           value: "false"
@@ -40,6 +75,8 @@ spec:
       workspaces:
         - name: source
           workspace: source
+      runAfter:
+        - oss-version
       params:
         - name: verbose
           value: "false"
@@ -47,5 +84,24 @@ spec:
           value: "github.com/tektoncd/pipeline/cmd/git-init"
         - name: container-image
           value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/git-init"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-controller
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/controller"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/controller"
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
