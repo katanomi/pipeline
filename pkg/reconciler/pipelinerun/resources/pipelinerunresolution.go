@@ -68,6 +68,9 @@ type ResolvedPipelineRunTask struct {
 	Run                   *v1alpha1.Run
 	PipelineTask          *v1beta1.PipelineTask
 	ResolvedTaskResources *resources.ResolvedTaskResources
+
+	// PermanentError indicates PipelineRunTask resolved got some error, it cannot recover by reconcile. this will make pipelinerun to failure
+	PermanentError error
 }
 
 // isDone returns true only if the task is skipped, succeeded or failed

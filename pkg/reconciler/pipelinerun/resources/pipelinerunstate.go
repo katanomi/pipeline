@@ -31,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/clock"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"knative.dev/pkg/apis"
+	"k8s.io/apimachinery/pkg/util/errors"
 )
 
 const (
@@ -131,6 +132,22 @@ func (state PipelineRunState) AdjustStartTime(unadjustedStartTime *metav1.Time) 
 		}
 	}
 	return adjustedStartTime.DeepCopy()
+}
+
+// ResolvedPermanentErrors will get all resolved error on resolved task
+func (state PipelineRunState) ResolvedPermanentErrors() error {
+	errs := []error{}
+	for _, item := range state {
+		if item.PermanentError != nil {
+			errs = append(errs, item.PermanentError)
+		}
+	}
+
+	if len(errs) == 0 {
+		return nil
+	}
+
+	return errors.NewAggregate(errs)
 }
 
 // GetTaskRunsStatus returns a map of taskrun name and the taskrun

@@ -54,6 +54,7 @@ import (
 	resolution "github.com/tektoncd/resolution/pkg/resource"
 	"go.uber.org/zap"
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8slabels "k8s.io/apimachinery/pkg/labels"
@@ -98,6 +99,9 @@ const (
 	// ReasonFailedValidation indicates that the reason for failure status is
 	// that pipelinerun failed runtime validation
 	ReasonFailedValidation = "PipelineValidationFailed"
+	// ReasonFailedPipelineTaskRunResolved indicates that the reason for failure status is
+	// that pipelinetask resolved failed
+	ReasonFailedPipelineTaskRunResolved = "PipelineTaskRunResolvedFailed"
 	// ReasonInvalidGraph indicates that the reason for the failure status is that the
 	// associated Pipeline is an invalid graph (a.k.a wrong order, cycle, …)
 	ReasonInvalidGraph = "PipelineInvalidGraph"
@@ -564,6 +568,12 @@ func (c *Reconciler) reconcile(ctx context.Context, pr *v1beta1.PipelineRun, get
 		return err
 	}
 
+	resolvedErrors := pipelineRunFacts.State.ResolvedPermanentErrors()
+	if  resolvedErrors != nil{
+		pr.Status.MarkFailed(ReasonFailedPipelineTaskRunResolved, resolvedErrors.Error())
+		return controller.NewPermanentError(resolvedErrors)
+	}
+
 	if err := c.processRunTimeouts(ctx, pr, pipelineRunState); err != nil {
 		return err
 	}
@@ -690,6 +700,11 @@ func (c *Reconciler) runNextSchedulableTask(ctx context.Context, pr *v1beta1.Pip
 			}
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "RunCreationFailed", "Failed to create Run %q: %v", rprt.RunName, err)
+				if apierrors.IsBadRequest(err){
+					rprt.PermanentError = err
+					// we would stop create other taskrun and mark pipeline to fail directly, but not recocnile again.
+					continue
+				}
 				return fmt.Errorf("error creating Run called %s for PipelineTask %s from PipelineRun %s: %w", rprt.RunName, rprt.PipelineTask.Name, pr.Name, err)
 			}
 		case rprt.IsMatrixed():
@@ -700,6 +715,11 @@ func (c *Reconciler) runNextSchedulableTask(ctx context.Context, pr *v1beta1.Pip
 			}
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "TaskRunsCreationFailed", "Failed to create TaskRuns %q: %v", rprt.TaskRunNames, err)
+				if apierrors.IsBadRequest(err){
+					rprt.PermanentError = err
+					// we would stop create other taskrun and mark pipeline to fail directly, but not recocnile again.
+					continue
+				}
 				return fmt.Errorf("error creating TaskRuns called %s for PipelineTask %s from PipelineRun %s: %w", rprt.TaskRunNames, rprt.PipelineTask.Name, pr.Name, err)
 			}
 		default:
@@ -710,6 +730,11 @@ func (c *Reconciler) runNextSchedulableTask(ctx context.Context, pr *v1beta1.Pip
 			}
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "TaskRunCreationFailed", "Failed to create TaskRun %q: %v", rprt.TaskRunName, err)
+				if apierrors.IsBadRequest(err){
+					rprt.PermanentError = err
+					// we would stop create other taskrun and mark pipeline to fail directly, but not recocnile again.
+					continue
+				}
 				return fmt.Errorf("error creating TaskRun called %s for PipelineTask %s from PipelineRun %s: %w", rprt.TaskRunName, rprt.PipelineTask.Name, pr.Name, err)
 			}
 
