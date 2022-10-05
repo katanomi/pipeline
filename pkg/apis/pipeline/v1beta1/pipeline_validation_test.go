@@ -1611,6 +1611,21 @@ func TestValidatePipelineParameterVariables_Failure(t *testing.T) {
 			Message: `non-existent variable in "$(params.does-not-exist)"`,
 			Paths:   []string{"[0].matrix[b-param].value[0]"},
 		},
+	},{
+		name: "invalid task use duplicate parameters",
+		tasks: []PipelineTask{{
+		Name:    "foo-task",
+		TaskRef: &TaskRef{Name: "foo-task"},
+		Params: []Param{{
+		Name: "duplicate-param", Value: ArrayOrString{Type: ParamTypeString, StringVal: "val1"},
+	}, {
+		Name: "duplicate-param", Value: ArrayOrString{Type: ParamTypeString, StringVal: "val2"},
+	}},
+	}},
+		expectedError: apis.FieldError{
+		Message: `expected exactly one, got both`,
+		Paths:   []string{"[0][1].name"},
+	},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -237,7 +237,13 @@ func ArrayReference(a string) string {
 }
 
 func validatePipelineParametersVariablesInTaskParameters(params []Param, prefix string, paramNames sets.String, arrayParamNames sets.String) (errs *apis.FieldError) {
-	for _, param := range params {
+	taskParamNames := sets.NewString()
+
+	for i, param := range params {
+		if taskParamNames.Has(param.Name) {
+			errs = errs.Also(apis.ErrMultipleOneOf("name").ViaIndex(i))
+		}
+
 		if param.Value.Type == ParamTypeString {
 			errs = errs.Also(validateStringVariable(param.Value.StringVal, prefix, paramNames, arrayParamNames).ViaFieldKey("params", param.Name))
 		} else {
@@ -245,6 +251,7 @@ func validatePipelineParametersVariablesInTaskParameters(params []Param, prefix 
 				errs = errs.Also(validateArrayVariable(arrayElement, prefix, paramNames, arrayParamNames).ViaFieldIndex("value", idx).ViaFieldKey("params", param.Name))
 			}
 		}
+		taskParamNames.Insert(param.Name)
 	}
 	return errs
 }
