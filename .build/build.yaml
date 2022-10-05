@@ -105,3 +105,22 @@ spec:
           value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/controller"
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-webhook
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/webhook"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/webhook"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
