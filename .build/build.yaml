@@ -25,24 +25,30 @@ spec:
     - name: golang-test
       taskRef:
         kind: ClusterTask
-        name: alauda-golang-build-test
+        name: go-unit-test
       runAfter:
         - oss-version
       params:
-      - name: test
-        value: |
-          export GOPROXY=https://build-nexus.alauda.cn/repository/golang/,https://goproxy.cn,direct
-          export CGO_ENABLED=0
-          export GONOSUMDB=*
-          go mod download
+        - name: command
+          value: |
+            export GOPROXY=https://build-nexus.alauda.cn/repository/golang/,https://goproxy.cn,direct
+            export CGO_ENABLED=0
+            export GONOSUMDB=*
+            export GOMAXPROCS=8
+            go mod download
 
-          temp_cover_file=$(mktemp -d)/profile.cov
+            go test -v -json -coverprofile cover.out ./... | tee test.json
 
-          go test -v -coverprofile ${temp_cover_file} ./...
-          cp ${temp_cover_file} profile.cov
-      - name: build
-        value: |
-          echo "do nothing"
+        - name: quality-gate-rules
+          value:
+            - lines-coverage=10
+            - passed-tests-rate=100
+        - name: tool-image
+          value: registry.alauda.cn:60080/devops/builder-go:1.18-ubuntu-495a3d88
+        - name: test-report-path
+          value: ./test.json
+        - name: coverage-report-path
+          value: ./cover.out
       workspaces:
         - name: source
           workspace: source
@@ -124,3 +130,36 @@ spec:
           value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/webhook"
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+
+  #################
+  # runTemplate
+  #################
+  runTemplate:
+    spec:
+      taskRunSpecs:
+        - pipelineTaskName: golang-test
+          stepOverrides:
+            - name: prepare
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 100Mi
+                requests:
+                  cpu: 50m
+                  memory: 50Mi
+            - name: test
+              resources:
+                requests:
+                  cpu: "6"
+                  memory: 4Gi
+                limits:
+                  cpu: "8"
+                  memory: 6Gi
+            - name: analysis
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 100Mi
+                requests:
+                  cpu: 50m
+                  memory: 50Mi
