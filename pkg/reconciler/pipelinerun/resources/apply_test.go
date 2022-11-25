@@ -18,6 +18,7 @@ package resources
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"testing"
 
@@ -3168,7 +3169,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			"pt1": {},
 		},
 		expectedResults: nil,
-		expectedError:   fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError:   nil,
 	}, {
 		description: "invalid-taskrun-name-no-returned-result",
 		results: []v1beta1.PipelineResult{{
@@ -3195,7 +3196,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			}},
 		},
 		expectedResults: nil,
-		expectedError:   fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError:   nil,
 	}, {
 		description: "unsuccessful-taskrun-no-returned-result",
 		results: []v1beta1.PipelineResult{{
@@ -3223,7 +3224,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			Name:  "bar",
 			Value: *v1beta1.NewStructuredValues("rae"),
 		}},
-		expectedError: fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError: nil,
 	}, {
 		description: "multiple-results-multiple-successful-tasks ",
 		results: []v1beta1.PipelineResult{{
@@ -3276,7 +3277,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			}},
 		},
 		expectedResults: nil,
-		expectedError:   fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError:   nil,
 	}, {
 		description: "right-customtask-name-wrong-result-name-no-returned-result",
 		results: []v1beta1.PipelineResult{{
@@ -3290,7 +3291,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			}},
 		},
 		expectedResults: nil,
-		expectedError:   fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError:   nil,
 	}, {
 		description: "unsuccessful-run-no-returned-result",
 		results: []v1beta1.PipelineResult{{
@@ -3301,7 +3302,7 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 			"customtask": {},
 		},
 		expectedResults: nil,
-		expectedError:   fmt.Errorf("invalid pipelineresults [foo], the referred results don't exist"),
+		expectedError:   nil,
 	}, {
 		description: "wrong-result-reference-expression",
 		results: []v1beta1.PipelineResult{{
@@ -3350,6 +3351,9 @@ func TestApplyTaskResultsToPipelineResults(t *testing.T) {
 		t.Run(tc.description, func(t *testing.T) {
 			received, err := ApplyTaskResultsToPipelineResults(tc.results, tc.taskResults, tc.runResults)
 			if tc.expectedError != nil {
+				if err == nil {
+					err = errors.New("")
+				}
 				if d := cmp.Diff(tc.expectedError.Error(), err.Error()); d != "" {
 					t.Errorf("ApplyTaskResultsToPipelineResults() errors diff %s", diff.PrintWantGot(d))
 				}

@@ -360,7 +360,8 @@ func ApplyTaskResultsToPipelineResults(
 					stringReplacements[variable] = *resultValue
 				} else {
 					// referred result name is not existent
-					invalidPipelineResults = append(invalidPipelineResults, pipelineResult.Name)
+					// TODO(qingliu): for compatibility, no error need returned here.
+					// invalidPipelineResults = append(invalidPipelineResults, pipelineResult.Name)
 					validPipelineResult = false
 				}
 			// For object type result: tasks.<taskName>.results.<objectResultName>.<individualAttribute>
