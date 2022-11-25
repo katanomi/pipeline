@@ -434,7 +434,7 @@ github.com/sirupsen/logrus
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
 github.com/spf13/pflag
-# github.com/stretchr/testify v1.7.0
+# github.com/stretchr/testify v1.8.1
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
@@ -468,7 +468,7 @@ github.com/tektoncd/resolution/pkg/resource
 # github.com/vbatts/tar-split v0.11.2
 ## explicit; go 1.15
 github.com/vbatts/tar-split/archive/tar
-# go.opencensus.io v0.23.0
+# go.opencensus.io v0.24.0
 ## explicit; go 1.13
 go.opencensus.io
 go.opencensus.io/internal
