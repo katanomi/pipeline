@@ -166,7 +166,7 @@ func setTaskRunStatusBasedOnStepStatus(logger *zap.SugaredLogger, stepStatuses [
 					logger.Errorf("error extracting the exit code of step %q in taskrun %q: %v", s.Name, tr.Name, err)
 					merr = multierror.Append(merr, err)
 				}
-				taskResults, pipelineResourceResults, filteredResults := filterResultsAndResources(results)
+				taskResults, pipelineResourceResults, filteredResults := filterResultsAndResources(results, tr)
 				trs.TaskRunResults = append(trs.TaskRunResults, taskResults...)
 				if tr.IsSuccessful() {
 					trs.ResourcesResult = append(trs.ResourcesResult, pipelineResourceResults...)
@@ -220,10 +220,31 @@ func createMessageFromResults(results []v1beta1.PipelineResourceResult) (string,
 	return string(bytes), nil
 }
 
-func filterResultsAndResources(results []v1beta1.PipelineResourceResult) ([]v1beta1.TaskRunResult, []v1beta1.PipelineResourceResult, []v1beta1.PipelineResourceResult) {
+func generateTaskResultName2TypeMap(tr *v1beta1.TaskRun) map[string]v1beta1.ResultsType {
+	if tr == nil {
+		return nil
+	}
+	var specResults []v1beta1.TaskResult
+	if tr.Spec.TaskSpec != nil {
+		specResults = append(specResults, tr.Spec.TaskSpec.Results...)
+	}
+	if tr.Status.TaskSpec != nil {
+		specResults = append(specResults, tr.Status.TaskSpec.Results...)
+	}
+	//
+	resultName2TypeMap := make(map[string]v1beta1.ResultsType)
+	for _, result := range specResults {
+		resultName2TypeMap[result.Name] = result.Type
+	}
+	return resultName2TypeMap
+}
+
+func filterResultsAndResources(results []v1beta1.PipelineResourceResult, tr *v1beta1.TaskRun) ([]v1beta1.TaskRunResult, []v1beta1.PipelineResourceResult, []v1beta1.PipelineResourceResult) {
 	var taskResults []v1beta1.TaskRunResult
 	var pipelineResourceResults []v1beta1.PipelineResourceResult
 	var filteredResults []v1beta1.PipelineResourceResult
+
+	resultName2TypeMap := generateTaskResultName2TypeMap(tr)
 	for _, r := range results {
 		switch r.ResultType {
 		case v1beta1.TaskRunResultType:
@@ -232,6 +253,18 @@ func filterResultsAndResources(results []v1beta1.PipelineResourceResult) ([]v1be
 			if err != nil {
 				continue
 			}
+			if expectedType, ok := resultName2TypeMap[r.Key]; ok && v.Type != v1beta1.ParamType(expectedType) {
+				if v.Type == v1beta1.ParamTypeObject && expectedType == v1beta1.ResultsTypeString {
+					v = v1beta1.ResultValue{
+						Type:      v1beta1.ParamTypeString,
+						StringVal: r.Value,
+					}
+				} else {
+					fmt.Printf("Warn: taskrun %s/%s result %s type %q does not match expected %q\n",
+						tr.GetNamespace(), tr.GetName(), r.Key, v.Type, expectedType)
+				}
+			}
+			//
 			taskRunResult := v1beta1.TaskRunResult{
 				Name:  r.Key,
 				Type:  v1beta1.ResultsType(v.Type),
