@@ -130,6 +130,120 @@ spec:
           value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/webhook"
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-imagedigestexporter
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/imagedigestexporter"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/imagedigestexporter"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-kubeconfigwriter
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/kubeconfigwriter"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/kubeconfigwriter"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-nop
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/nop"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/nop"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-workingdirinit
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/workingdirinit"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/workingdirinit"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-resolvers
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/resolvers"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/resolvers"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
+    ## ko publish image
+    - name: build-pipeline-pullrequest-init
+      taskRef:
+        kind: ClusterTask
+        name: alauda-ko-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - oss-version
+      params:
+        - name: verbose
+          value: "false"
+        - name: import-path
+          value: "github.com/tektoncd/pipeline/cmd/pullrequest-init"
+        - name: container-image
+          value: "build-harbor.alauda.cn/devops/tektoncd/pipeline/cmd/pullrequest-init"
+        - name: container-image-tag
+          value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
 
     #################
     # code-scan
