@@ -27,6 +27,7 @@ import (
 	rrclient "github.com/tektoncd/pipeline/pkg/client/resolution/clientset/versioned"
 	rrlisters "github.com/tektoncd/pipeline/pkg/client/resolution/listers/resolution/v1beta1"
 	resolutioncommon "github.com/tektoncd/pipeline/pkg/resolution/common"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"knative.dev/pkg/apis"
 )
@@ -52,9 +53,9 @@ var _ Requester = &CRDRequester{}
 // kubernetes cluster, returning any errors experienced while doing so.
 // If ResolutionRequest is succeeded then it returns the resolved data.
 func (r *CRDRequester) Submit(ctx context.Context, resolver ResolverName, req Request) (ResolvedResource, error) {
-	rr, _ := r.lister.ResolutionRequests(req.Namespace()).Get(req.Name())
+	rr, err := r.lister.ResolutionRequests(req.Namespace()).Get(req.Name())
 	if rr == nil {
-		if err := r.createResolutionRequest(ctx, resolver, req); err != nil {
+		if err := r.createResolutionRequest(ctx, resolver, req); err != nil && !apierrors.IsAlreadyExists(err) {
 			return nil, err
 		}
 		return nil, resolutioncommon.ErrorRequestInProgress
@@ -74,7 +75,7 @@ func (r *CRDRequester) Submit(ctx context.Context, resolver ResolverName, req Re
 	}
 
 	message := rr.Status.GetCondition(apis.ConditionSucceeded).GetMessage()
-	err := resolutioncommon.NewError(resolutioncommon.ReasonResolutionFailed, errors.New(message))
+	err = resolutioncommon.NewError(resolutioncommon.ReasonResolutionFailed, errors.New(message))
 	return nil, err
 }
 
