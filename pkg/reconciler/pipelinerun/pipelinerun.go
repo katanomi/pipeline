@@ -123,6 +123,9 @@ const (
 	// ReasonResolvingPipelineRef indicates that the PipelineRun is waiting for
 	// its pipelineRef to be asynchronously resolved.
 	ReasonResolvingPipelineRef = "ResolvingPipelineRef"
+	// ReasonCreateRunFailed indicates that the reason for the failure status is that the
+	// associated TaskRun couldn't be created
+	ReasonCreateRunFailed = "CreateRunFailed"
 )
 
 // Reconciler implements controller.Reconciler for Configuration resources.
@@ -755,30 +758,41 @@ func (c *Reconciler) runNextSchedulableTask(ctx context.Context, pr *v1beta1.Pip
 			continue
 		}
 
+		defer func() {
+			// If it is a permanent error, set the pipelinerun directly to a failed state.
+			if err != nil && controller.IsPermanentError(err) {
+				pr.Status.MarkFailed(ReasonCreateRunFailed, err.Error())
+			}
+		}()
+
 		switch {
 		case rpt.IsCustomTask() && rpt.IsMatrixed():
 			rpt.Runs, err = c.createRuns(ctx, rpt, pr)
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "RunsCreationFailed", "Failed to create Runs %q: %v", rpt.RunNames, err)
-				return fmt.Errorf("error creating Runs called %s for PipelineTask %s from PipelineRun %s: %w", rpt.RunNames, rpt.PipelineTask.Name, pr.Name, err)
+				err = fmt.Errorf("error creating Runs called %s for PipelineTask %s from PipelineRun %s: %w", rpt.RunNames, rpt.PipelineTask.Name, pr.Name, err)
+				return err
 			}
 		case rpt.IsCustomTask():
 			rpt.Run, err = c.createRun(ctx, rpt.RunName, nil, rpt, pr)
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "RunCreationFailed", "Failed to create Run %q: %v", rpt.RunName, err)
-				return fmt.Errorf("error creating Run called %s for PipelineTask %s from PipelineRun %s: %w", rpt.RunName, rpt.PipelineTask.Name, pr.Name, err)
+				err = fmt.Errorf("error creating Run called %s for PipelineTask %s from PipelineRun %s: %w", rpt.RunName, rpt.PipelineTask.Name, pr.Name, err)
+				return err
 			}
 		case rpt.IsMatrixed():
 			rpt.TaskRuns, err = c.createTaskRuns(ctx, rpt, pr, as.StorageBasePath(pr))
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "TaskRunsCreationFailed", "Failed to create TaskRuns %q: %v", rpt.TaskRunNames, err)
-				return fmt.Errorf("error creating TaskRuns called %s for PipelineTask %s from PipelineRun %s: %w", rpt.TaskRunNames, rpt.PipelineTask.Name, pr.Name, err)
+				err = fmt.Errorf("error creating TaskRuns called %s for PipelineTask %s from PipelineRun %s: %w", rpt.TaskRunNames, rpt.PipelineTask.Name, pr.Name, err)
+				return err
 			}
 		default:
 			rpt.TaskRun, err = c.createTaskRun(ctx, rpt.TaskRunName, nil, rpt, pr, as.StorageBasePath(pr))
 			if err != nil {
 				recorder.Eventf(pr, corev1.EventTypeWarning, "TaskRunCreationFailed", "Failed to create TaskRun %q: %v", rpt.TaskRunName, err)
-				return fmt.Errorf("error creating TaskRun called %s for PipelineTask %s from PipelineRun %s: %w", rpt.TaskRunName, rpt.PipelineTask.Name, pr.Name, err)
+				err = fmt.Errorf("error creating TaskRun called %s for PipelineTask %s from PipelineRun %s: %w", rpt.TaskRunName, rpt.PipelineTask.Name, pr.Name, err)
+				return err
 			}
 
 		}
@@ -1008,6 +1022,7 @@ func propagateWorkspaces(rpt *resources.ResolvedPipelineTask) (*resources.Resolv
 }
 
 func getTaskrunWorkspaces(ctx context.Context, pr *v1beta1.PipelineRun, rpt *resources.ResolvedPipelineTask) ([]v1beta1.WorkspaceBinding, string, error) {
+	var err error
 	var workspaces []v1beta1.WorkspaceBinding
 	var pipelinePVCWorkspaceName string
 	pipelineRunWorkspaces := make(map[string]v1beta1.WorkspaceBinding)
@@ -1018,10 +1033,9 @@ func getTaskrunWorkspaces(ctx context.Context, pr *v1beta1.PipelineRun, rpt *res
 	if config.FromContextOrDefaults(ctx).FeatureFlags.EnableAPIFields == config.AlphaAPIFields {
 		// Propagate required workspaces from pipelineRun to the pipelineTasks
 		if rpt.PipelineTask.TaskSpec != nil {
-			var err error
 			rpt, err = propagateWorkspaces(rpt)
 			if err != nil {
-				return nil, "", err
+				return nil, "", controller.NewPermanentError(err)
 			}
 		}
 	}
@@ -1050,7 +1064,8 @@ func getTaskrunWorkspaces(ctx context.Context, pr *v1beta1.PipelineRun, rpt *res
 				}
 			}
 			if !workspaceIsOptional {
-				return nil, "", fmt.Errorf("expected workspace %q to be provided by pipelinerun for pipeline task %q", pipelineWorkspace, rpt.PipelineTask.Name)
+				err = fmt.Errorf("expected workspace %q to be provided by pipelinerun for pipeline task %q", pipelineWorkspace, rpt.PipelineTask.Name)
+				return nil, "", controller.NewPermanentError(err)
 			}
 		}
 
