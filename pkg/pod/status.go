@@ -136,11 +136,36 @@ func MakeTaskRunStatus(logger *zap.SugaredLogger, tr v1beta1.TaskRun, pod *corev
 		merr = multierror.Append(merr, err)
 	}
 
+	modifyTaskRunStatusStepStartTime(&tr)
+
 	setTaskRunStatusBasedOnSidecarStatus(sidecarStatuses, trs)
 
 	trs.TaskRunResults = removeDuplicateResults(trs.TaskRunResults)
 
 	return *trs, merr.ErrorOrNil()
+}
+
+// modifyTaskRunStatusStepStartTime will modify the taskRun status step startTime
+// For example if first step done and second step is running, it will set the second
+// step's startedAt to be the first step's finishedAt
+func modifyTaskRunStatusStepStartTime(tr *v1beta1.TaskRun) {
+	var previousStep *v1beta1.StepState
+
+	for index := range tr.Status.Steps {
+		// means it is the first step
+		if previousStep == nil {
+			previousStep = &tr.Status.Steps[index]
+			continue
+		}
+		// if current step is running and previousStep is not nil then we need update
+		// current step and quit modify left step
+		if tr.Status.Steps[index].Running != nil && previousStep != nil && previousStep.Terminated != nil {
+			tr.Status.Steps[index].Running.StartedAt = previousStep.Terminated.FinishedAt
+			break
+		}
+		// assign current step to previousStep
+		previousStep = &tr.Status.Steps[index]
+	}
 }
 
 func setTaskRunStatusBasedOnStepStatus(logger *zap.SugaredLogger, stepStatuses []corev1.ContainerStatus, tr *v1beta1.TaskRun) *multierror.Error {

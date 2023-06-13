@@ -108,6 +108,200 @@ func TestSetTaskRunStatusBasedOnStepStatus(t *testing.T) {
 	}
 }
 
+func TestModifyTaskRunStatusTaskStartTime(t *testing.T) {
+	tr := &v1beta1.TaskRun{}
+	now := time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC)
+	tenMinuteLater := now.Add(10 * time.Minute)
+	elevenMinuteLater := now.Add(10 * time.Minute)
+
+	t.Run("all steps are waiting", func(t *testing.T) {
+		status := v1beta1.TaskRunStatus{
+			TaskRunStatusFields: v1beta1.TaskRunStatusFields{
+				Steps: []v1beta1.StepState{
+					{
+						Name: "first",
+						ContainerState: corev1.ContainerState{
+							Waiting: &corev1.ContainerStateWaiting{},
+						},
+					},
+					{
+						Name: "second",
+						ContainerState: corev1.ContainerState{
+							Waiting: &corev1.ContainerStateWaiting{},
+						},
+					},
+					{
+						Name: "third",
+						ContainerState: corev1.ContainerState{
+							Waiting: &corev1.ContainerStateWaiting{},
+						},
+					},
+				},
+			},
+		}
+		tr.Status = status
+		modifyTaskRunStatusStepStartTime(tr)
+		if d := cmp.Diff(tr.Status, status); d != "" {
+			t.Errorf("status should not change since there is no running status, changed: %s", d)
+		}
+	})
+
+	t.Run("first step start to run", func(t *testing.T) {
+		status := v1beta1.TaskRunStatus{
+			TaskRunStatusFields: v1beta1.TaskRunStatusFields{
+				Steps: []v1beta1.StepState{
+					{
+						Name: "first",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+					{
+						Name: "second",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+					{
+						Name: "third",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+				},
+			},
+		}
+		tr.Status = status
+		modifyTaskRunStatusStepStartTime(tr)
+		if d := cmp.Diff(tr.Status, status); d != "" {
+			t.Errorf("status should not change as there is only one running status, changed: %s", d)
+		}
+	})
+
+	t.Run("second step start to run", func(t *testing.T) {
+
+		status := v1beta1.TaskRunStatus{
+			TaskRunStatusFields: v1beta1.TaskRunStatusFields{
+				Steps: []v1beta1.StepState{
+					{
+						Name: "first",
+						ContainerState: corev1.ContainerState{
+							Terminated: &corev1.ContainerStateTerminated{
+								StartedAt:  metav1.NewTime(now),
+								FinishedAt: metav1.NewTime(tenMinuteLater),
+							},
+						},
+					},
+					{
+						Name: "second",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+					{
+						Name: "third",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+				},
+			},
+		}
+		tr.Status = status
+
+		expectStatus := v1beta1.TaskRunStatus{
+			TaskRunStatusFields: v1beta1.TaskRunStatusFields{
+				Steps: []v1beta1.StepState{
+					{
+						Name: "first",
+						ContainerState: corev1.ContainerState{
+							Terminated: &corev1.ContainerStateTerminated{
+								StartedAt:  metav1.NewTime(now),
+								FinishedAt: metav1.NewTime(tenMinuteLater),
+							},
+						},
+					},
+					{
+						Name: "second",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(tenMinuteLater),
+							},
+						},
+					},
+					{
+						Name: "third",
+						ContainerState: corev1.ContainerState{
+							Running: &corev1.ContainerStateRunning{
+								StartedAt: metav1.NewTime(now),
+							},
+						},
+					},
+				},
+			},
+		}
+
+		modifyTaskRunStatusStepStartTime(tr)
+		if d := cmp.Diff(tr.Status, expectStatus); d != "" {
+			t.Errorf("status should changed as first one is done and second's start time should be the first's finished time: %s", d)
+		}
+	})
+
+	t.Run("steps all done, no need to change status", func(t *testing.T) {
+
+		status := v1beta1.TaskRunStatus{
+			TaskRunStatusFields: v1beta1.TaskRunStatusFields{
+				Steps: []v1beta1.StepState{
+					{
+						Name: "first",
+						ContainerState: corev1.ContainerState{
+							Terminated: &corev1.ContainerStateTerminated{
+								StartedAt:  metav1.NewTime(now),
+								FinishedAt: metav1.NewTime(tenMinuteLater),
+							},
+						},
+					},
+					{
+						Name: "second",
+						ContainerState: corev1.ContainerState{
+							Terminated: &corev1.ContainerStateTerminated{
+								StartedAt:  metav1.NewTime(tenMinuteLater),
+								FinishedAt: metav1.NewTime(elevenMinuteLater),
+							},
+						},
+					},
+					{
+						Name: "third",
+						ContainerState: corev1.ContainerState{
+							Terminated: &corev1.ContainerStateTerminated{
+								StartedAt:  metav1.NewTime(tenMinuteLater),
+								FinishedAt: metav1.NewTime(elevenMinuteLater),
+							},
+						},
+					},
+				},
+			},
+		}
+		tr.Status = status
+
+		modifyTaskRunStatusStepStartTime(tr)
+		if d := cmp.Diff(tr.Status, status); d != "" {
+			t.Errorf("status should not since all step has done: %s", d)
+		}
+	})
+
+}
+
 func TestMakeTaskRunStatus(t *testing.T) {
 	for _, c := range []struct {
 		desc      string
