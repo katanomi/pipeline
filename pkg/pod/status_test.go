@@ -108,7 +108,7 @@ func TestSetTaskRunStatusBasedOnStepStatus(t *testing.T) {
 	}
 }
 
-func TestModifyTaskRunStatusTaskStartTime(t *testing.T) {
+func TestModifyTaskRunStatusStepStartTime(t *testing.T) {
 	tr := &v1beta1.TaskRun{}
 	now := time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC)
 	tenMinuteLater := now.Add(10 * time.Minute)
@@ -180,7 +180,7 @@ func TestModifyTaskRunStatusTaskStartTime(t *testing.T) {
 		tr.Status = status
 		modifyTaskRunStatusStepStartTime(tr)
 		if d := cmp.Diff(tr.Status, status); d != "" {
-			t.Errorf("status should not change as there is only one running status, changed: %s", d)
+			t.Errorf("status should not change since this is the first step in running status, changed: %s", d)
 		}
 	})
 
