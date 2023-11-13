@@ -56,6 +56,7 @@ func TestSpire_TaskRunSign(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	cc := GetControllerAPIClient(ctx)
@@ -96,6 +97,7 @@ func TestSpire_CheckSpireVerifiedFlag(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	cc := GetControllerAPIClient(ctx)
@@ -136,6 +138,7 @@ func TestSpire_CheckHashSimilarities(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	cc := GetControllerAPIClient(ctx)
@@ -190,6 +193,7 @@ func TestSpire_CheckTamper(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	cc := GetControllerAPIClient(ctx)
@@ -343,6 +347,7 @@ func TestSpire_TaskRunResultsSign(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	ec := NewEntrypointerAPIClient(cfg)
@@ -448,6 +453,7 @@ func TestSpire_TaskRunResultsSignTamper(t *testing.T) {
 
 	cfg := &config.SpireConfig{}
 	cfg.SocketPath = wl.Addr()
+	cfg.ServerAddr = wl.Addr()
 	cfg.TrustDomain = trustDomain
 
 	ec := NewEntrypointerAPIClient(cfg)
