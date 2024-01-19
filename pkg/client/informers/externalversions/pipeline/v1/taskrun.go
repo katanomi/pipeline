@@ -56,13 +56,16 @@ func NewTaskRunInformer(client versioned.Interface, namespace string, resyncPeri
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
 func NewFilteredTaskRunInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+	// indicate if we have flushed the apiserver cache for this namespace
+	cacheChecked := map[string]bool{}
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.TektonV1().TaskRuns(namespace).List(context.TODO(), options)
+				return fetchOrRefreshList[pipelinev1.TaskRun, pipelinev1.TaskRunList](
+					&TaskRunLister{client}, namespace, options, cacheChecked)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
