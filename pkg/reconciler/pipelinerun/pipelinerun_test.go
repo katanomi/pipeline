@@ -8342,7 +8342,6 @@ metadata:
 spec:
   serviceAccountName: test-sa
   taskRef:
-    kind: Task
     resolver: bar
 `)
 

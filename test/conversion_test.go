@@ -709,7 +709,6 @@ spec:
   serviceAccountName: default
   timeout: 1h
   taskRef:
-    kind: Task
     resolver: bundles
     params:
     - name: bundle
@@ -744,10 +743,9 @@ metadata:
   namespace: %s
 spec:
   taskRunTemplate:
-  timeouts: 
+  timeouts:
     pipeline: 1h
   pipelineRef:
-    kind: Pipeline
     resolver: bundles
     params:
     - name: bundle
@@ -765,7 +763,6 @@ status:
     tasks:
     - name: hello-world
       taskRef:
-        kind: Task
         resolver: bundles
         params:
         - name: bundle
@@ -786,7 +783,6 @@ metadata:
 spec:
   timeout: 1h
   taskRef:
-    kind: Task
     resolver: bundles
     params:
     - name: bundle
@@ -820,10 +816,9 @@ metadata:
   name: %s
   namespace: %s
 spec:
-  timeouts: 
+  timeouts:
     pipeline: 1h
   pipelineRef:
-    kind: Pipeline
     resolver: bundles
     params:
     - name: bundle
@@ -841,7 +836,6 @@ status:
     tasks:
     - name: hello-world
       taskRef:
-        kind: Task
         resolver: bundles
         params:
         - name: bundle
