@@ -70,6 +70,7 @@ kind: Task
 
 // MustParseV1beta1TaskAndSetDefaults takes YAML and parses it into a *v1beta1.Task and sets defaults
 func MustParseV1beta1TaskAndSetDefaults(t *testing.T, yaml string) *v1beta1.Task {
+	t.Helper()
 	task := MustParseV1beta1Task(t, yaml)
 	task.SetDefaults(context.Background())
 	return task
@@ -99,6 +100,7 @@ kind: Task
 
 // MustParseV1TaskAndSetDefaults takes YAML and parses it into a *v1.Task and sets defaults
 func MustParseV1TaskAndSetDefaults(t *testing.T, yaml string) *v1.Task {
+	t.Helper()
 	task := MustParseV1Task(t, yaml)
 	task.SetDefaults(context.Background())
 	return task
@@ -150,6 +152,7 @@ kind: Pipeline
 
 // MustParseV1beta1PipelineAndSetDefaults takes YAML and parses it into a *v1beta1.Pipeline and sets defaults
 func MustParseV1beta1PipelineAndSetDefaults(t *testing.T, yaml string) *v1beta1.Pipeline {
+	t.Helper()
 	p := MustParseV1beta1Pipeline(t, yaml)
 	p.SetDefaults(context.Background())
 	return p
@@ -168,6 +171,7 @@ kind: Pipeline
 
 // MustParseV1PipelineAndSetDefaults takes YAML and parses it into a *v1.Pipeline and sets defaults
 func MustParseV1PipelineAndSetDefaults(t *testing.T, yaml string) *v1.Pipeline {
+	t.Helper()
 	p := MustParseV1Pipeline(t, yaml)
 	p.SetDefaults(context.Background())
 	return p
