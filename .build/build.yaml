@@ -360,6 +360,7 @@ spec:
             cd image/git-init/
             go get golang.org/x/net@v0.17.0
             go get google.golang.org/grpc@v1.56.3
+            go get google.golang.org/protobuf@v1.33.0
             go mod tidy
             go mod vendor
 
@@ -369,7 +370,7 @@ spec:
               # git-init uses a base image that includes Git, and supports running either
               # as root or as user nonroot with UID 65532.
               # image latest-glibc-hack is from katanomi tekton-operator hack Dockerfile
-              github.com/tektoncd-catalog/git-clone/image/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20240401
+              github.com/tektoncd-catalog/git-clone/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20240401
             EOF
     ## ko publish image
     - name: build-git-init
