@@ -369,7 +369,7 @@ spec:
               # git-init uses a base image that includes Git, and supports running either
               # as root or as user nonroot with UID 65532.
               # image latest-glibc-hack is from katanomi tekton-operator hack Dockerfile
-              github.com/tektoncd-catalog/git-clone/image/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20231016
+              github.com/tektoncd-catalog/git-clone/image/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20240401
             EOF
     ## ko publish image
     - name: build-git-init
