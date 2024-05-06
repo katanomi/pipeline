@@ -40,8 +40,7 @@ spec:
             - lines-coverage=10
             - passed-tests-rate=100
         - name: tool-image
-          # value: registry.alauda.cn:60080/devops/builder-go:1.18-ubuntu-495a3d88
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
         - name: test-report-path
           value: ./test.json
         - name: coverage-report-path
@@ -53,6 +52,7 @@ spec:
           workspace: cache
     ## ko publish image
     - name: build-entrypoint
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -75,9 +75,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     ## ko publish image
     - name: build-pipeline-controller
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -100,9 +101,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     ## ko publish image
     - name: build-pipeline-webhook
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -125,9 +127,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     ## ko publish image
     - name: build-pipeline-nop
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -150,9 +153,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     ## ko publish image
     - name: build-pipeline-workingdirinit
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -175,9 +179,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     ## ko publish image
     - name: build-pipeline-resolvers
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -200,9 +205,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     # ko publish image
     - name: build-pipeline-events
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -225,9 +231,10 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
     # ko publish image
     - name: build-pipeline-sidecarlogresults
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -250,12 +257,12 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
 
     # clone tkn
     - name: clone-tkn
       timeout: 30m
-      retries: 0
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-git-clone
@@ -272,7 +279,7 @@ spec:
     # modify the .ko.yaml
     - name: modify-tkn-koyaml
       timeout: 30m
-      retries: 0
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: run-script
@@ -280,15 +287,33 @@ spec:
         - name: source
           workspace: source-tkn
       runAfter:
-        - clone-git-init
+        - clone-tkn
       params:
+        - name: tool-image
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
         - name: command
           value: |
+            export GOPROXY=https://build-nexus.alauda.cn/repository/golang/,https://goproxy.cn,direct
+            export CGO_ENABLED=0
+            export GONOSUMDB=*
+
+            # modify th go.mod to fix vuln
+            go get github.com/docker/docker@v24.0.9
+            go get github.com/go-jose/go-jose/v3@v3.0.3
+            go get github.com/sigstore/cosign/v2@v2.2.4
+            go get golang.org/x/net@v0.23.0
+            go get google.golang.org/protobuf@v1.33.0
+            go get gopkg.in/go-jose/go-jose.v2@v2.6.3
+            go mod tidy
+            go mod vendor
+
             cat <<EOF > .ko.yaml
             defaultBaseImage: build-harbor.alauda.cn/ops/distroless-static-nonroot:20220806
             EOF
+
     ## ko publish image
     - name: build-tkn
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-ko-build
@@ -312,12 +337,12 @@ spec:
         - name: container-image-tag
           value: v$(tasks.oss-version.results.oss-version)-$(tasks.oss-version.results.commit-short-id)
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
 
     # clone git-init
     - name: clone-git-init
       timeout: 30m
-      retries: 0
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: alauda-git-clone
@@ -334,7 +359,7 @@ spec:
     # modify the .ko.yaml
     - name: modify-git-init-koyaml
       timeout: 30m
-      retries: 0
+      retries: 1
       taskRef:
         kind: ClusterTask
         name: run-script
@@ -345,7 +370,7 @@ spec:
         - clone-git-init
       params:
         - name: tool-image
-          value: build-harbor.alauda.cn/devops/builder-go:1.21-bullseye-9dcd2518
+          value: registry.alauda.cn:60080/devops/builder-go-121:latest
         - name: command
           value: |
             # copy files to kodata, avoid next step build error
@@ -358,7 +383,7 @@ spec:
 
             # modify th go.mod to fix vuln
             cd image/git-init/
-            go get golang.org/x/net@v0.17.0
+            go get golang.org/x/net@v0.23.0
             go get google.golang.org/grpc@v1.56.3
             go get google.golang.org/protobuf@v1.33.0
             go mod tidy
@@ -372,6 +397,7 @@ spec:
               # image latest-glibc-hack is from katanomi tekton-operator hack Dockerfile
               github.com/tektoncd-catalog/git-clone/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20240401
             EOF
+
     ## ko publish image
     - name: build-git-init
       taskRef:
@@ -403,7 +429,7 @@ spec:
     #################
     - name: code-scan
       timeout: 30m
-      retries: 0
+      retries: 1
       runAfter:
         - golang-test
       taskRef:
@@ -415,6 +441,140 @@ spec:
       params:
         - name: server
           value: https://build-sonar.alauda.cn
+
+    - name: trivy-scan-1
+      timeout: 30m
+      retries: 1
+      taskRef:
+        resolver: katanomi.hub
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: trivy-image-scan
+      workspaces:
+        - name: source
+          workspace: source
+        - name: cache
+          workspace: cache
+      when:
+      - input: $(build.git.revision.type)
+        operator: in
+        values:
+        - "PullRequest"
+      params:
+        - name: targets
+          value:
+            - $(tasks.build-entrypoint.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-controller.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-webhook.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-nop.results.ociContainerImageBuild-url)
+        - name: quality-gate-rules
+          value:
+            - severity=Medium
+        - name: scan-flags
+          value:
+            - db.skip-update=false
+            - db.repository=build-harbor.alauda.cn/ops/aquasecurity/trivy-db
+
+    - name: trivy-scan-2
+      timeout: 30m
+      retries: 1
+      taskRef:
+        resolver: katanomi.hub
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: trivy-image-scan
+      workspaces:
+        - name: source
+          workspace: source
+        - name: cache
+          workspace: cache
+      when:
+      - input: $(build.git.revision.type)
+        operator: in
+        values:
+        - "PullRequest"
+      params:
+        - name: targets
+          value:
+            - $(tasks.build-pipeline-workingdirinit.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-resolvers.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-events.results.ociContainerImageBuild-url)
+            - $(tasks.build-pipeline-sidecarlogresults.results.ociContainerImageBuild-url)
+        - name: quality-gate-rules
+          value:
+            - severity=Medium
+        - name: scan-flags
+          value:
+            - db.skip-update=false
+            - db.repository=build-harbor.alauda.cn/ops/aquasecurity/trivy-db
+
+    - name: trivy-scan-ktn
+      timeout: 30m
+      retries: 1
+      taskRef:
+        resolver: katanomi.hub
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: trivy-image-scan
+      workspaces:
+        - name: source
+          workspace: source
+        - name: cache
+          workspace: cache
+      when:
+      - input: $(build.git.revision.type)
+        operator: in
+        values:
+        - "PullRequest"
+      params:
+        - name: targets
+          value:
+            - $(tasks.build-tkn.results.ociContainerImageBuild-url)
+        - name: quality-gate-rules
+          value:
+            - severity=Critical
+        - name: scan-flags
+          value:
+            - db.skip-update=false
+            - db.repository=build-harbor.alauda.cn/ops/aquasecurity/trivy-db
+
+    - name: trivy-scan-git-init
+      timeout: 30m
+      retries: 1
+      taskRef:
+        resolver: katanomi.hub
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: trivy-image-scan
+      workspaces:
+        - name: source
+          workspace: source
+        - name: cache
+          workspace: cache
+      when:
+      - input: $(build.git.revision.type)
+        operator: in
+        values:
+        - "PullRequest"
+      params:
+        - name: targets
+          value:
+            - $(tasks.build-git-init.results.ociContainerImageBuild-url)
+        - name: quality-gate-rules
+          value:
+            - severity=Critical
+        - name: scan-flags
+          value:
+            - db.skip-update=false
+            - db.repository=build-harbor.alauda.cn/ops/aquasecurity/trivy-db
 
   #################
   # runTemplate
@@ -479,6 +639,16 @@ spec:
                   cpu: "6"
                   memory: "6Gi"
         - pipelineTaskName: modify-git-init-koyaml
+          stepOverrides:
+            - name: run
+              resources:
+                requests:
+                  cpu: "500m"
+                  memory: "512Mi"
+                limits:
+                  cpu: "1"
+                  memory: "1Gi"
+        - pipelineTaskName: modify-tkn-koyaml
           stepOverrides:
             - name: run
               resources:
