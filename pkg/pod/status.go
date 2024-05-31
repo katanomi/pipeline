@@ -227,22 +227,16 @@ func setTaskRunStatusBasedOnStepStatus(ctx context.Context, logger *zap.SugaredL
 		// extraction of results from sidecar logs
 		slr, err := sidecarlogresults.GetResultsFromSidecarLogs(ctx, kubeclient, tr.Namespace, tr.Status.PodName, pipeline.ReservedResultsSidecarContainerName, podPhase)
 		if err != nil {
-			logger.Errorf("error extracting results from sidecar logs: %v", err)
 			merr = multierror.Append(merr, err)
 		}
 		sidecarLogResults = append(sidecarLogResults, slr...)
 		// Debug the problem of missing taskrun results, there are actually results in the sidecar logs
-		if len(tr.Status.TaskSpec.Results) != len(slr) {
-			cond := tr.Status.GetCondition(apis.ConditionSucceeded)
-			if !cond.IsUnknown() {
-				logger.Infow("Some results were not extracted from the sidecar logs", "podPhase", podPhase,
-					"actual", len(slr), "extracted", len(tr.Status.TaskSpec.Results))
-				sidecarlogresults.DebugSidecarLogs(ctx, logger, kubeclient, tr.Namespace, tr.Status.PodName,
-					pipeline.ReservedResultsSidecarContainerName, podPhase)
-			} else {
-				logger.Infow("TaskRun is still running, some results were not extracted from the sidecar logs",
-					"podPhase", podPhase, "actual", len(slr), "extracted", len(tr.Status.TaskSpec.Results))
-			}
+		cond := tr.Status.GetCondition(apis.ConditionSucceeded)
+		if cond.IsTrue() && len(tr.Status.TaskSpec.Results) != len(slr) {
+			logger.Infow("Some results were not extracted from the sidecar logs", "podPhase", podPhase,
+				"actual", len(slr), "extracted", len(tr.Status.TaskSpec.Results))
+			sidecarlogresults.DebugSidecarLogs(ctx, logger, kubeclient, tr.Namespace, tr.Status.PodName,
+				pipeline.ReservedResultsSidecarContainerName, podPhase)
 		}
 	}
 	// Populate Task results from sidecar logs
