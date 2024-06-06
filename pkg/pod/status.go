@@ -579,7 +579,9 @@ func areContainersCompleted(ctx context.Context, pod *corev1.Pod) bool {
 	if config.FromContextOrDefaults(ctx).FeatureFlags.ResultExtractionMethod == config.ResultExtractionMethodSidecarLogs {
 		// If we are using sidecar logs to extract results, we need to wait for the sidecar to complete.
 		// Avoid failing to obtain the final result from the sidecar because the sidecar is not yet complete.
-		nameFilters = append(nameFilters, IsContainerSidecar)
+		nameFilters = append(nameFilters, func(name string) bool {
+			return name == pipeline.ReservedResultsSidecarContainerName
+		})
 	}
 	return checkContainersCompleted(pod, nameFilters)
 }
