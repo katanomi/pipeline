@@ -23,6 +23,8 @@ metadata:
     # backstage techdocs plugin
     backstage.io/techdocs-ref: dir:.
 
+    acp.cpaas.io/functional-attributes: core
+
 spec:
   type: service
   lifecycle: production
