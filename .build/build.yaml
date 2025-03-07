@@ -393,14 +393,17 @@ spec:
             export GONOSUMDB=*
 
             # modify th go.mod to fix vuln
-            go get github.com/go-jose/go-jose/v3@v3.0.3
-            go get github.com/sigstore/cosign/v2@v2.2.4
-            go get golang.org/x/net@v0.23.0
+            go get github.com/go-jose/go-jose/v3@v3.0.4
+            go get github.com/go-jose/go-jose/v4@v4.0.5
+            go get github.com/sigstore/cosign/v2@v2.4.3
+            go get golang.org/x/net@v0.37.0
             go get google.golang.org/protobuf@v1.33.0
             go get gopkg.in/go-jose/go-jose.v2@v2.6.3
             go get github.com/hashicorp/go-retryablehttp@v0.7.7
             go get github.com/Azure/azure-sdk-for-go/sdk/azidentity@v1.6.0
             go get github.com/docker/docker@v27.1
+            go get github.com/golang-jwt/jwt/v4@v4.5.1
+            go get golang.org/x/crypto@v0.36.0
             go mod tidy
             go mod vendor
 
@@ -480,7 +483,7 @@ spec:
 
             # modify th go.mod to fix vuln
             cd image/git-init/
-            go get golang.org/x/net@v0.24.0
+            go get golang.org/x/net@v0.37.0
             go get google.golang.org/grpc@v1.56.3
             go get google.golang.org/protobuf@v1.33.0
             go mod tidy
@@ -491,8 +494,8 @@ spec:
             baseImageOverrides:
               # git-init uses a base image that includes Git, and supports running either
               # as root or as user nonroot with UID 65532.
-              # image latest-glibc-hack is from katanomi tekton-operator hack Dockerfile
-              github.com/tektoncd-catalog/git-clone/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20241105
+              # image latest-glibc-hack is from: https://gitlab-ce.alauda.cn/ops/edge-devops-task/blob/master/images/chainguard/git/Dockerfile
+              github.com/tektoncd-catalog/git-clone/git-init: build-harbor.alauda.cn/3rdparty/cgr.dev/chainguard/git:latest-glibc-hack-20250307
             EOF
 
     ## ko publish image
