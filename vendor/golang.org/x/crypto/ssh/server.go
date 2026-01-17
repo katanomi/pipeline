@@ -526,7 +526,11 @@ func (s *connection) serverAuthenticate(config *ServerConfig) (*Permissions, err
 	authFailures := 0
 	noneAuthCount := 0
 	var authErrs []error
+<<<<<<< HEAD
 	var calledBannerCallback bool
+=======
+	var displayedBanner bool
+>>>>>>> github/release-v0.56.x
 	partialSuccessReturned := false
 	// Set the initial authentication callbacks from the config. They can be
 	// changed if a PartialSuccessError is returned.

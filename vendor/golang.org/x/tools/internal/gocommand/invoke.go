@@ -15,7 +15,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
+<<<<<<< HEAD
 	"path/filepath"
+=======
+>>>>>>> github/release-v0.56.x
 	"reflect"
 	"regexp"
 	"runtime"
@@ -169,9 +172,13 @@ type Invocation struct {
 	// TODO(rfindley): remove, in favor of Args.
 	ModFile string
 
+<<<<<<< HEAD
 	// Overlay is the name of the JSON overlay file that describes
 	// unsaved editor buffers; see [WriteOverlays].
 	// If set, the go command is invoked with -overlay=Overlay.
+=======
+	// If Overlay is set, the go command is invoked with -overlay=Overlay.
+>>>>>>> github/release-v0.56.x
 	// TODO(rfindley): remove, in favor of Args.
 	Overlay string
 

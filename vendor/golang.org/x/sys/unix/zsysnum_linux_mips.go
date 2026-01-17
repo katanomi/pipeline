@@ -436,6 +436,7 @@ const (
 	SYS_FUTEX_WAKE                   = 4454
 	SYS_FUTEX_WAIT                   = 4455
 	SYS_FUTEX_REQUEUE                = 4456
+<<<<<<< HEAD
 	SYS_STATMOUNT                    = 4457
 	SYS_LISTMOUNT                    = 4458
 	SYS_LSM_GET_SELF_ATTR            = 4459
@@ -446,4 +447,6 @@ const (
 	SYS_GETXATTRAT                   = 4464
 	SYS_LISTXATTRAT                  = 4465
 	SYS_REMOVEXATTRAT                = 4466
+=======
+>>>>>>> github/release-v0.56.x
 )

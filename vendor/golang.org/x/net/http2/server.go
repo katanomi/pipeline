@@ -965,7 +965,11 @@ func (sc *serverConn) serve(conf http2Config) {
 	sc.setConnState(http.StateIdle)
 
 	if sc.srv.IdleTimeout > 0 {
+<<<<<<< HEAD
 		sc.idleTimer = sc.srv.afterFunc(sc.srv.IdleTimeout, sc.onIdleTimer)
+=======
+		sc.idleTimer = time.AfterFunc(sc.srv.IdleTimeout, sc.onIdleTimer)
+>>>>>>> github/release-v0.56.x
 		defer sc.idleTimer.Stop()
 	}
 
@@ -1732,7 +1736,11 @@ func (sc *serverConn) closeStream(st *stream, err error) {
 	delete(sc.streams, st.id)
 	if len(sc.streams) == 0 {
 		sc.setConnState(http.StateIdle)
+<<<<<<< HEAD
 		if sc.srv.IdleTimeout > 0 && sc.idleTimer != nil {
+=======
+		if sc.srv.IdleTimeout > 0 {
+>>>>>>> github/release-v0.56.x
 			sc.idleTimer.Reset(sc.srv.IdleTimeout)
 		}
 		if h1ServerKeepAlivesDisabled(sc.hs) {
@@ -2214,9 +2222,15 @@ func (sc *serverConn) newStream(id, pusherID uint32, state streamState) *stream 
 	st.cw.Init()
 	st.flow.conn = &sc.flow // link to conn-level counter
 	st.flow.add(sc.initialStreamSendWindowSize)
+<<<<<<< HEAD
 	st.inflow.init(sc.initialStreamRecvWindowSize)
 	if sc.hs.WriteTimeout > 0 {
 		st.writeDeadline = sc.srv.afterFunc(sc.hs.WriteTimeout, st.onWriteTimeout)
+=======
+	st.inflow.init(sc.srv.initialStreamRecvWindowSize())
+	if sc.hs.WriteTimeout > 0 {
+		st.writeDeadline = time.AfterFunc(sc.hs.WriteTimeout, st.onWriteTimeout)
+>>>>>>> github/release-v0.56.x
 	}
 
 	sc.streams[id] = st

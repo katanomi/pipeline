@@ -518,6 +518,7 @@ type TCPInfo struct {
 	Total_rto            uint16
 	Total_rto_recoveries uint16
 	Total_rto_time       uint32
+<<<<<<< HEAD
 }
 
 type TCPVegasInfo struct {
@@ -541,6 +542,8 @@ type TCPBBRInfo struct {
 	Min_rtt     uint32
 	Pacing_gain uint32
 	Cwnd_gain   uint32
+=======
+>>>>>>> github/release-v0.56.x
 }
 
 type CanFilter struct {
@@ -584,7 +587,10 @@ const (
 	SizeofICMPv6Filter      = 0x20
 	SizeofUcred             = 0xc
 	SizeofTCPInfo           = 0xf8
+<<<<<<< HEAD
 	SizeofTCPCCInfo         = 0x14
+=======
+>>>>>>> github/release-v0.56.x
 	SizeofCanFilter         = 0x8
 	SizeofTCPRepairOpt      = 0x8
 )
@@ -1752,6 +1758,15 @@ const (
 	IFLA_IPVLAN_UNSPEC                         = 0x0
 	IFLA_IPVLAN_MODE                           = 0x1
 	IFLA_IPVLAN_FLAGS                          = 0x2
+<<<<<<< HEAD
+=======
+	NETKIT_NEXT                                = -0x1
+	NETKIT_PASS                                = 0x0
+	NETKIT_DROP                                = 0x2
+	NETKIT_REDIRECT                            = 0x7
+	NETKIT_L2                                  = 0x0
+	NETKIT_L3                                  = 0x1
+>>>>>>> github/release-v0.56.x
 	IFLA_NETKIT_UNSPEC                         = 0x0
 	IFLA_NETKIT_PEER_INFO                      = 0x1
 	IFLA_NETKIT_PRIMARY                        = 0x2
@@ -1790,7 +1805,10 @@ const (
 	IFLA_VXLAN_DF                              = 0x1d
 	IFLA_VXLAN_VNIFILTER                       = 0x1e
 	IFLA_VXLAN_LOCALBYPASS                     = 0x1f
+<<<<<<< HEAD
 	IFLA_VXLAN_LABEL_POLICY                    = 0x20
+=======
+>>>>>>> github/release-v0.56.x
 	IFLA_GENEVE_UNSPEC                         = 0x0
 	IFLA_GENEVE_ID                             = 0x1
 	IFLA_GENEVE_REMOTE                         = 0x2
@@ -1820,8 +1838,11 @@ const (
 	IFLA_GTP_ROLE                              = 0x4
 	IFLA_GTP_CREATE_SOCKETS                    = 0x5
 	IFLA_GTP_RESTART_COUNT                     = 0x6
+<<<<<<< HEAD
 	IFLA_GTP_LOCAL                             = 0x7
 	IFLA_GTP_LOCAL6                            = 0x8
+=======
+>>>>>>> github/release-v0.56.x
 	IFLA_BOND_UNSPEC                           = 0x0
 	IFLA_BOND_MODE                             = 0x1
 	IFLA_BOND_ACTIVE_SLAVE                     = 0x2
@@ -1854,7 +1875,10 @@ const (
 	IFLA_BOND_AD_LACP_ACTIVE                   = 0x1d
 	IFLA_BOND_MISSED_MAX                       = 0x1e
 	IFLA_BOND_NS_IP6_TARGET                    = 0x1f
+<<<<<<< HEAD
 	IFLA_BOND_COUPLED_CONTROL                  = 0x20
+=======
+>>>>>>> github/release-v0.56.x
 	IFLA_BOND_AD_INFO_UNSPEC                   = 0x0
 	IFLA_BOND_AD_INFO_AGGREGATOR               = 0x1
 	IFLA_BOND_AD_INFO_NUM_PORTS                = 0x2
@@ -1974,6 +1998,7 @@ const (
 	IFLA_DSA_UNSPEC                            = 0x0
 	IFLA_DSA_CONDUIT                           = 0x1
 	IFLA_DSA_MASTER                            = 0x1
+<<<<<<< HEAD
 )
 
 const (
@@ -1983,6 +2008,8 @@ const (
 	NETKIT_REDIRECT = 0x7
 	NETKIT_L2       = 0x0
 	NETKIT_L3       = 0x1
+=======
+>>>>>>> github/release-v0.56.x
 )
 
 const (
@@ -3510,7 +3537,11 @@ const (
 	DEVLINK_PORT_FN_ATTR_STATE                         = 0x2
 	DEVLINK_PORT_FN_ATTR_OPSTATE                       = 0x3
 	DEVLINK_PORT_FN_ATTR_CAPS                          = 0x4
+<<<<<<< HEAD
 	DEVLINK_PORT_FUNCTION_ATTR_MAX                     = 0x6
+=======
+	DEVLINK_PORT_FUNCTION_ATTR_MAX                     = 0x5
+>>>>>>> github/release-v0.56.x
 )
 
 type FsverityDigest struct {
@@ -4400,7 +4431,10 @@ const (
 type LandlockRulesetAttr struct {
 	Access_fs  uint64
 	Access_net uint64
+<<<<<<< HEAD
 	Scoped     uint64
+=======
+>>>>>>> github/release-v0.56.x
 }
 
 type LandlockPathBeneathAttr struct {
@@ -5351,7 +5385,11 @@ const (
 	NL80211_FREQUENCY_ATTR_GO_CONCURRENT                    = 0xf
 	NL80211_FREQUENCY_ATTR_INDOOR_ONLY                      = 0xe
 	NL80211_FREQUENCY_ATTR_IR_CONCURRENT                    = 0xf
+<<<<<<< HEAD
 	NL80211_FREQUENCY_ATTR_MAX                              = 0x21
+=======
+	NL80211_FREQUENCY_ATTR_MAX                              = 0x1c
+>>>>>>> github/release-v0.56.x
 	NL80211_FREQUENCY_ATTR_MAX_TX_POWER                     = 0x6
 	NL80211_FREQUENCY_ATTR_NO_10MHZ                         = 0x11
 	NL80211_FREQUENCY_ATTR_NO_160MHZ                        = 0xc

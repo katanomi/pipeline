@@ -1018,6 +1018,7 @@ func (e *ProcessEnv) GetResolver() (Resolver, error) {
 		// already know the view type.
 		if len(e.Env["GOMOD"]) == 0 && len(e.Env["GOWORK"]) == 0 {
 			e.resolver = newGopathResolver(e)
+<<<<<<< HEAD
 			e.logf("created gopath resolver")
 		} else if r, err := newModuleResolver(e, e.ModCache); err != nil {
 			e.resolverErr = err
@@ -1025,12 +1026,19 @@ func (e *ProcessEnv) GetResolver() (Resolver, error) {
 		} else {
 			e.resolver = Resolver(r)
 			e.logf("created module resolver")
+=======
+		} else if r, err := newModuleResolver(e, e.ModCache); err != nil {
+			e.resolverErr = err
+		} else {
+			e.resolver = Resolver(r)
+>>>>>>> github/release-v0.56.x
 		}
 	}
 
 	return e.resolver, e.resolverErr
 }
 
+<<<<<<< HEAD
 // logf logs if e.Logf is non-nil.
 func (e *ProcessEnv) logf(format string, args ...any) {
 	if e.Logf != nil {
@@ -1038,6 +1046,8 @@ func (e *ProcessEnv) logf(format string, args ...any) {
 	}
 }
 
+=======
+>>>>>>> github/release-v0.56.x
 // buildContext returns the build.Context to use for matching files.
 //
 // TODO(rfindley): support dynamic GOOS, GOARCH here, when doing cross-platform
@@ -1141,8 +1151,13 @@ type Resolver interface {
 	// scan works with callback to search for packages. See scanCallback for details.
 	scan(ctx context.Context, callback *scanCallback) error
 
+<<<<<<< HEAD
 	// loadExports returns the package name and set of exported symbols in the
 	// package at dir. loadExports may be called concurrently.
+=======
+	// loadExports returns the set of exported symbols in the package at dir.
+	// loadExports may be called concurrently.
+>>>>>>> github/release-v0.56.x
 	loadExports(ctx context.Context, pkg *pkg, includeTest bool) (string, []stdlib.Symbol, error)
 
 	// scoreImportPath returns the relevance for an import path.
@@ -1232,10 +1247,18 @@ func addExternalCandidates(ctx context.Context, pass *pass, refs references, fil
 
 	i := 0
 	for pkgName, symbols := range refs {
+<<<<<<< HEAD
 		index := i // claim an index in results
 		i++
 		pkgName := pkgName
 		symbols := symbols
+=======
+		wg.Add(1)
+		go func(pkgName string, symbols map[string]bool) {
+			defer wg.Done()
+
+			found, err := findImport(ctx, pass, found[pkgName], pkgName, symbols)
+>>>>>>> github/release-v0.56.x
 
 		g.Go(func() error {
 			found, err := searcher.search(ctx, found[pkgName], pkgName, symbols)
@@ -1261,10 +1284,14 @@ func addExternalCandidates(ctx context.Context, pass *pass, refs references, fil
 		return err
 	}
 
+<<<<<<< HEAD
 	for _, result := range results {
 		if result == nil {
 			continue
 		}
+=======
+	for result := range results {
+>>>>>>> github/release-v0.56.x
 		// Don't offer completions that would shadow predeclared
 		// names, such as github.com/coreos/etcd/error.
 		if types.Universe.Lookup(result.pkg.name) != nil { // predeclared
@@ -1658,7 +1685,13 @@ func loadExportsFromFiles(ctx context.Context, env *ProcessEnv, dir string, incl
 	}
 	sortSymbols(exports)
 
+<<<<<<< HEAD
 	env.logf("loaded exports in dir %v (package %v): %v", dir, pkgName, exports)
+=======
+	if env.Logf != nil {
+		env.Logf("loaded exports in dir %v (package %v): %v", dir, pkgName, exports)
+	}
+>>>>>>> github/release-v0.56.x
 	return pkgName, exports, nil
 }
 
@@ -1668,6 +1701,7 @@ func sortSymbols(syms []stdlib.Symbol) {
 	})
 }
 
+<<<<<<< HEAD
 // A symbolSearcher searches for a package with a set of symbols, among a set
 // of candidates. See [symbolSearcher.search].
 //
@@ -1685,6 +1719,11 @@ type symbolSearcher struct {
 //
 // If successful, returns the resulting package.
 func (s *symbolSearcher) search(ctx context.Context, candidates []pkgDistance, pkgName string, symbols map[string]bool) (*pkg, error) {
+=======
+// findImport searches for a package with the given symbols.
+// If no package is found, findImport returns ("", false, nil)
+func findImport(ctx context.Context, pass *pass, candidates []pkgDistance, pkgName string, symbols map[string]bool) (*pkg, error) {
+>>>>>>> github/release-v0.56.x
 	// Sort the candidates by their import package length,
 	// assuming that shorter package names are better than long
 	// ones.  Note that this sorts by the de-vendored name, so
@@ -1745,8 +1784,27 @@ func (s *symbolSearcher) search(ctx context.Context, candidates []pkgDistance, p
 					}
 					pkg = nil
 				}
+<<<<<<< HEAD
 				rescv[i] <- pkg // may be nil
 			}()
+=======
+
+				exportsMap := make(map[string]bool, len(exports))
+				for _, sym := range exports {
+					exportsMap[sym.Name] = true
+				}
+
+				// If it doesn't have the right
+				// symbols, send nil to mean no match.
+				for symbol := range symbols {
+					if !exportsMap[symbol] {
+						resc <- nil
+						return
+					}
+				}
+				resc <- c.pkg
+			}(c, rescv[i])
+>>>>>>> github/release-v0.56.x
 		}
 	}()
 

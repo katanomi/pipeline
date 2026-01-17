@@ -232,8 +232,13 @@ func EqualExportedValuesf(t TestingT, expected interface{}, actual interface{}, 
 	t.FailNow()
 }
 
+<<<<<<< HEAD
 // EqualValues asserts that two objects are equal or convertible to the larger
 // type and equal.
+=======
+// EqualValues asserts that two objects are equal or convertible to the same types
+// and equal.
+>>>>>>> github/release-v0.56.x
 //
 //	require.EqualValues(t, uint32(123), int32(123))
 func EqualValues(t TestingT, expected interface{}, actual interface{}, msgAndArgs ...interface{}) {
@@ -246,8 +251,13 @@ func EqualValues(t TestingT, expected interface{}, actual interface{}, msgAndArg
 	t.FailNow()
 }
 
+<<<<<<< HEAD
 // EqualValuesf asserts that two objects are equal or convertible to the larger
 // type and equal.
+=======
+// EqualValuesf asserts that two objects are equal or convertible to the same types
+// and equal.
+>>>>>>> github/release-v0.56.x
 //
 //	require.EqualValuesf(t, uint32(123), int32(123), "error message %s", "formatted")
 func EqualValuesf(t TestingT, expected interface{}, actual interface{}, msg string, args ...interface{}) {
@@ -1609,7 +1619,11 @@ func NotErrorIsf(t TestingT, err error, target error, msg string, args ...interf
 
 // NotImplements asserts that an object does not implement the specified interface.
 //
+<<<<<<< HEAD
 //	require.NotImplements(t, (*MyInterface)(nil), new(MyObject))
+=======
+//	assert.NotImplements(t, (*MyInterface)(nil), new(MyObject))
+>>>>>>> github/release-v0.56.x
 func NotImplements(t TestingT, interfaceObject interface{}, object interface{}, msgAndArgs ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1622,7 +1636,11 @@ func NotImplements(t TestingT, interfaceObject interface{}, object interface{}, 
 
 // NotImplementsf asserts that an object does not implement the specified interface.
 //
+<<<<<<< HEAD
 //	require.NotImplementsf(t, (*MyInterface)(nil), new(MyObject), "error message %s", "formatted")
+=======
+//	assert.NotImplementsf(t, (*MyInterface)(nil), new(MyObject), "error message %s", "formatted")
+>>>>>>> github/release-v0.56.x
 func NotImplementsf(t TestingT, interfaceObject interface{}, object interface{}, msg string, args ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1749,8 +1767,13 @@ func NotSamef(t TestingT, expected interface{}, actual interface{}, msg string, 
 // contain all elements given in the specified subset list(array, slice...) or
 // map.
 //
+<<<<<<< HEAD
 //	require.NotSubset(t, [1, 3, 4], [1, 2])
 //	require.NotSubset(t, {"x": 1, "y": 2}, {"z": 3})
+=======
+//	assert.NotSubset(t, [1, 3, 4], [1, 2])
+//	assert.NotSubset(t, {"x": 1, "y": 2}, {"z": 3})
+>>>>>>> github/release-v0.56.x
 func NotSubset(t TestingT, list interface{}, subset interface{}, msgAndArgs ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1765,8 +1788,13 @@ func NotSubset(t TestingT, list interface{}, subset interface{}, msgAndArgs ...i
 // contain all elements given in the specified subset list(array, slice...) or
 // map.
 //
+<<<<<<< HEAD
 //	require.NotSubsetf(t, [1, 3, 4], [1, 2], "error message %s", "formatted")
 //	require.NotSubsetf(t, {"x": 1, "y": 2}, {"z": 3}, "error message %s", "formatted")
+=======
+//	assert.NotSubsetf(t, [1, 3, 4], [1, 2], "error message %s", "formatted")
+//	assert.NotSubsetf(t, {"x": 1, "y": 2}, {"z": 3}, "error message %s", "formatted")
+>>>>>>> github/release-v0.56.x
 func NotSubsetf(t TestingT, list interface{}, subset interface{}, msg string, args ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1974,8 +2002,13 @@ func Samef(t TestingT, expected interface{}, actual interface{}, msg string, arg
 // Subset asserts that the specified list(array, slice...) or map contains all
 // elements given in the specified subset list(array, slice...) or map.
 //
+<<<<<<< HEAD
 //	require.Subset(t, [1, 2, 3], [1, 2])
 //	require.Subset(t, {"x": 1, "y": 2}, {"x": 1})
+=======
+//	assert.Subset(t, [1, 2, 3], [1, 2])
+//	assert.Subset(t, {"x": 1, "y": 2}, {"x": 1})
+>>>>>>> github/release-v0.56.x
 func Subset(t TestingT, list interface{}, subset interface{}, msgAndArgs ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()
@@ -1989,8 +2022,13 @@ func Subset(t TestingT, list interface{}, subset interface{}, msgAndArgs ...inte
 // Subsetf asserts that the specified list(array, slice...) or map contains all
 // elements given in the specified subset list(array, slice...) or map.
 //
+<<<<<<< HEAD
 //	require.Subsetf(t, [1, 2, 3], [1, 2], "error message %s", "formatted")
 //	require.Subsetf(t, {"x": 1, "y": 2}, {"x": 1}, "error message %s", "formatted")
+=======
+//	assert.Subsetf(t, [1, 2, 3], [1, 2], "error message %s", "formatted")
+//	assert.Subsetf(t, {"x": 1, "y": 2}, {"x": 1}, "error message %s", "formatted")
+>>>>>>> github/release-v0.56.x
 func Subsetf(t TestingT, list interface{}, subset interface{}, msg string, args ...interface{}) {
 	if h, ok := t.(tHelper); ok {
 		h.Helper()

@@ -370,8 +370,11 @@ func (w *Worktree) doAdd(path string, ignorePattern []gitignore.Pattern, skipSta
 		}
 	}
 
+<<<<<<< HEAD
 	path = filepath.Clean(path)
 
+=======
+>>>>>>> github/release-v0.56.x
 	if err != nil || !fi.IsDir() {
 		added, h, err = w.doAddFile(idx, s, path, ignorePattern)
 	} else {

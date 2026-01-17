@@ -3619,6 +3619,7 @@ type DCB struct {
 	EvtChar    byte
 	wReserved1 uint16
 }
+<<<<<<< HEAD
 
 // Keyboard Layout Flags.
 // See https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadkeyboardlayoutw
@@ -3840,3 +3841,5 @@ const (
 	MOUSE_EVENT              = 0x0002
 	WINDOW_BUFFER_SIZE_EVENT = 0x0004
 )
+=======
+>>>>>>> github/release-v0.56.x

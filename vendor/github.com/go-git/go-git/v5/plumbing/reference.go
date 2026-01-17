@@ -188,7 +188,11 @@ func (r ReferenceName) Validate() error {
 
 	isBranch := r.IsBranch()
 	isTag := r.IsTag()
+<<<<<<< HEAD
 	for i, part := range parts {
+=======
+	for _, part := range parts {
+>>>>>>> github/release-v0.56.x
 		// rule 6
 		if len(part) == 0 {
 			return ErrInvalidReferenceName
@@ -205,7 +209,11 @@ func (r ReferenceName) Validate() error {
 			return ErrInvalidReferenceName
 		}
 
+<<<<<<< HEAD
 		if (isBranch || isTag) && strings.HasPrefix(part, "-") && (i == 2) { // branches & tags can't start with -
+=======
+		if (isBranch || isTag) && strings.HasPrefix(part, "-") { // branches & tags can't start with -
+>>>>>>> github/release-v0.56.x
 			return ErrInvalidReferenceName
 		}
 	}

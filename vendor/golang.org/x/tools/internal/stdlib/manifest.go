@@ -23,7 +23,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"ErrWriteAfterClose", Var, 0},
 		{"ErrWriteTooLong", Var, 0},
 		{"FileInfoHeader", Func, 1},
+<<<<<<< HEAD
 		{"FileInfoNames", Type, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Format", Type, 10},
 		{"FormatGNU", Const, 10},
 		{"FormatPAX", Const, 10},
@@ -821,7 +824,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*ConnectionState).ExportKeyingMaterial", Method, 11},
 		{"(*Dialer).Dial", Method, 15},
 		{"(*Dialer).DialContext", Method, 15},
+<<<<<<< HEAD
 		{"(*ECHRejectionError).Error", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*QUICConn).Close", Method, 21},
 		{"(*QUICConn).ConnectionState", Method, 21},
 		{"(*QUICConn).HandleData", Method, 21},
@@ -829,7 +835,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*QUICConn).SendSessionTicket", Method, 21},
 		{"(*QUICConn).SetTransportParameters", Method, 21},
 		{"(*QUICConn).Start", Method, 21},
+<<<<<<< HEAD
 		{"(*QUICConn).StoreSession", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*SessionState).Bytes", Method, 21},
 		{"(AlertError).Error", Method, 21},
 		{"(ClientAuthType).String", Method, 15},
@@ -880,8 +889,11 @@ var PackageSymbols = map[string][]Symbol{
 		{"Config.ClientSessionCache", Field, 3},
 		{"Config.CurvePreferences", Field, 3},
 		{"Config.DynamicRecordSizingDisabled", Field, 7},
+<<<<<<< HEAD
 		{"Config.EncryptedClientHelloConfigList", Field, 23},
 		{"Config.EncryptedClientHelloRejectionVerify", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Config.GetCertificate", Field, 4},
 		{"Config.GetClientCertificate", Field, 8},
 		{"Config.GetConfigForClient", Field, 8},
@@ -907,7 +919,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"ConnectionState", Type, 0},
 		{"ConnectionState.CipherSuite", Field, 0},
 		{"ConnectionState.DidResume", Field, 1},
+<<<<<<< HEAD
 		{"ConnectionState.ECHAccepted", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"ConnectionState.HandshakeComplete", Field, 0},
 		{"ConnectionState.NegotiatedProtocol", Field, 0},
 		{"ConnectionState.NegotiatedProtocolIsMutual", Field, 0},
@@ -931,8 +946,11 @@ var PackageSymbols = map[string][]Symbol{
 		{"ECDSAWithP384AndSHA384", Const, 8},
 		{"ECDSAWithP521AndSHA512", Const, 8},
 		{"ECDSAWithSHA1", Const, 10},
+<<<<<<< HEAD
 		{"ECHRejectionError", Type, 23},
 		{"ECHRejectionError.RetryConfigList", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Ed25519", Const, 13},
 		{"InsecureCipherSuites", Func, 14},
 		{"Listen", Func, 0},
@@ -951,7 +969,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"ParseSessionState", Func, 21},
 		{"QUICClient", Func, 21},
 		{"QUICConfig", Type, 21},
+<<<<<<< HEAD
 		{"QUICConfig.EnableStoreSessionEvent", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"QUICConfig.TLSConfig", Field, 21},
 		{"QUICConn", Type, 21},
 		{"QUICEncryptionLevel", Type, 21},
@@ -963,12 +984,16 @@ var PackageSymbols = map[string][]Symbol{
 		{"QUICEvent.Data", Field, 21},
 		{"QUICEvent.Kind", Field, 21},
 		{"QUICEvent.Level", Field, 21},
+<<<<<<< HEAD
 		{"QUICEvent.SessionState", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"QUICEvent.Suite", Field, 21},
 		{"QUICEventKind", Type, 21},
 		{"QUICHandshakeDone", Const, 21},
 		{"QUICNoEvent", Const, 21},
 		{"QUICRejectedEarlyData", Const, 21},
+<<<<<<< HEAD
 		{"QUICResumeSession", Const, 23},
 		{"QUICServer", Func, 21},
 		{"QUICSessionTicketOptions", Type, 21},
@@ -977,6 +1002,13 @@ var PackageSymbols = map[string][]Symbol{
 		{"QUICSetReadSecret", Const, 21},
 		{"QUICSetWriteSecret", Const, 21},
 		{"QUICStoreSession", Const, 23},
+=======
+		{"QUICServer", Func, 21},
+		{"QUICSessionTicketOptions", Type, 21},
+		{"QUICSessionTicketOptions.EarlyData", Field, 21},
+		{"QUICSetReadSecret", Const, 21},
+		{"QUICSetWriteSecret", Const, 21},
+>>>>>>> github/release-v0.56.x
 		{"QUICTransportParameters", Const, 21},
 		{"QUICTransportParametersRequired", Const, 21},
 		{"QUICWriteData", Const, 21},
@@ -1049,8 +1081,11 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Certificate).Verify", Method, 0},
 		{"(*Certificate).VerifyHostname", Method, 0},
 		{"(*CertificateRequest).CheckSignature", Method, 5},
+<<<<<<< HEAD
 		{"(*OID).UnmarshalBinary", Method, 23},
 		{"(*OID).UnmarshalText", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*RevocationList).CheckSignatureFrom", Method, 19},
 		{"(CertificateInvalidError).Error", Method, 0},
 		{"(ConstraintViolationError).Error", Method, 0},
@@ -1058,8 +1093,11 @@ var PackageSymbols = map[string][]Symbol{
 		{"(InsecureAlgorithmError).Error", Method, 6},
 		{"(OID).Equal", Method, 22},
 		{"(OID).EqualASN1OID", Method, 22},
+<<<<<<< HEAD
 		{"(OID).MarshalBinary", Method, 23},
 		{"(OID).MarshalText", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(OID).String", Method, 22},
 		{"(PublicKeyAlgorithm).String", Method, 10},
 		{"(SignatureAlgorithm).String", Method, 6},
@@ -1213,7 +1251,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"ParseCertificates", Func, 0},
 		{"ParseDERCRL", Func, 0},
 		{"ParseECPrivateKey", Func, 1},
+<<<<<<< HEAD
 		{"ParseOID", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"ParsePKCS1PrivateKey", Func, 0},
 		{"ParsePKCS1PublicKey", Func, 10},
 		{"ParsePKCS8PrivateKey", Func, 0},
@@ -2559,7 +2600,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"PT_NOTE", Const, 0},
 		{"PT_NULL", Const, 0},
 		{"PT_OPENBSD_BOOTDATA", Const, 16},
+<<<<<<< HEAD
 		{"PT_OPENBSD_NOBTCFI", Const, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"PT_OPENBSD_RANDOMIZE", Const, 16},
 		{"PT_OPENBSD_WXNEEDED", Const, 16},
 		{"PT_PAX_FLAGS", Const, 16},
@@ -3639,16 +3683,23 @@ var PackageSymbols = map[string][]Symbol{
 		{"STT_COMMON", Const, 0},
 		{"STT_FILE", Const, 0},
 		{"STT_FUNC", Const, 0},
+<<<<<<< HEAD
 		{"STT_GNU_IFUNC", Const, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"STT_HIOS", Const, 0},
 		{"STT_HIPROC", Const, 0},
 		{"STT_LOOS", Const, 0},
 		{"STT_LOPROC", Const, 0},
 		{"STT_NOTYPE", Const, 0},
 		{"STT_OBJECT", Const, 0},
+<<<<<<< HEAD
 		{"STT_RELC", Const, 23},
 		{"STT_SECTION", Const, 0},
 		{"STT_SRELC", Const, 23},
+=======
+		{"STT_SECTION", Const, 0},
+>>>>>>> github/release-v0.56.x
 		{"STT_TLS", Const, 0},
 		{"STV_DEFAULT", Const, 0},
 		{"STV_HIDDEN", Const, 0},
@@ -4566,14 +4617,20 @@ var PackageSymbols = map[string][]Symbol{
 		{"URLEncoding", Var, 0},
 	},
 	"encoding/binary": {
+<<<<<<< HEAD
 		{"Append", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"AppendByteOrder", Type, 19},
 		{"AppendUvarint", Func, 19},
 		{"AppendVarint", Func, 19},
 		{"BigEndian", Var, 0},
 		{"ByteOrder", Type, 0},
+<<<<<<< HEAD
 		{"Decode", Func, 23},
 		{"Encode", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"LittleEndian", Var, 0},
 		{"MaxVarintLen16", Const, 0},
 		{"MaxVarintLen32", Const, 0},
@@ -5333,7 +5390,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"ParenExpr.Rparen", Field, 0},
 		{"ParenExpr.X", Field, 0},
 		{"Pkg", Const, 0},
+<<<<<<< HEAD
 		{"Preorder", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Print", Func, 0},
 		{"RECV", Const, 0},
 		{"RangeStmt", Type, 0},
@@ -5924,12 +5984,16 @@ var PackageSymbols = map[string][]Symbol{
 	},
 	"go/types": {
 		{"(*Alias).Obj", Method, 22},
+<<<<<<< HEAD
 		{"(*Alias).Origin", Method, 23},
 		{"(*Alias).Rhs", Method, 23},
 		{"(*Alias).SetTypeParams", Method, 23},
 		{"(*Alias).String", Method, 22},
 		{"(*Alias).TypeArgs", Method, 23},
 		{"(*Alias).TypeParams", Method, 23},
+=======
+		{"(*Alias).String", Method, 22},
+>>>>>>> github/release-v0.56.x
 		{"(*Alias).Underlying", Method, 22},
 		{"(*ArgumentError).Error", Method, 18},
 		{"(*ArgumentError).Unwrap", Method, 18},
@@ -5974,7 +6038,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Func).Pkg", Method, 5},
 		{"(*Func).Pos", Method, 5},
 		{"(*Func).Scope", Method, 5},
+<<<<<<< HEAD
 		{"(*Func).Signature", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*Func).String", Method, 5},
 		{"(*Func).Type", Method, 5},
 		{"(*Info).ObjectOf", Method, 5},
@@ -7024,12 +7091,15 @@ var PackageSymbols = map[string][]Symbol{
 		{"TempFile", Func, 0},
 		{"WriteFile", Func, 0},
 	},
+<<<<<<< HEAD
 	"iter": {
 		{"Pull", Func, 23},
 		{"Pull2", Func, 23},
 		{"Seq", Type, 23},
 		{"Seq2", Type, 23},
 	},
+=======
+>>>>>>> github/release-v0.56.x
 	"log": {
 		{"(*Logger).Fatal", Method, 0},
 		{"(*Logger).Fatalf", Method, 0},
@@ -7260,16 +7330,23 @@ var PackageSymbols = map[string][]Symbol{
 		{"Writer", Type, 0},
 	},
 	"maps": {
+<<<<<<< HEAD
 		{"All", Func, 23},
 		{"Clone", Func, 21},
 		{"Collect", Func, 23},
+=======
+		{"Clone", Func, 21},
+>>>>>>> github/release-v0.56.x
 		{"Copy", Func, 21},
 		{"DeleteFunc", Func, 21},
 		{"Equal", Func, 21},
 		{"EqualFunc", Func, 21},
+<<<<<<< HEAD
 		{"Insert", Func, 23},
 		{"Keys", Func, 23},
 		{"Values", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 	},
 	"math": {
 		{"Abs", Func, 0},
@@ -7660,7 +7737,10 @@ var PackageSymbols = map[string][]Symbol{
 	},
 	"math/rand/v2": {
 		{"(*ChaCha8).MarshalBinary", Method, 22},
+<<<<<<< HEAD
 		{"(*ChaCha8).Read", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*ChaCha8).Seed", Method, 22},
 		{"(*ChaCha8).Uint64", Method, 22},
 		{"(*ChaCha8).UnmarshalBinary", Method, 22},
@@ -7680,7 +7760,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Rand).NormFloat64", Method, 22},
 		{"(*Rand).Perm", Method, 22},
 		{"(*Rand).Shuffle", Method, 22},
+<<<<<<< HEAD
 		{"(*Rand).Uint", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*Rand).Uint32", Method, 22},
 		{"(*Rand).Uint32N", Method, 22},
 		{"(*Rand).Uint64", Method, 22},
@@ -7708,7 +7791,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"Rand", Type, 22},
 		{"Shuffle", Func, 22},
 		{"Source", Type, 22},
+<<<<<<< HEAD
 		{"Uint", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Uint32", Func, 22},
 		{"Uint32N", Func, 22},
 		{"Uint64", Func, 22},
@@ -7789,7 +7875,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*DNSError).Error", Method, 0},
 		{"(*DNSError).Temporary", Method, 0},
 		{"(*DNSError).Timeout", Method, 0},
+<<<<<<< HEAD
 		{"(*DNSError).Unwrap", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*Dialer).Dial", Method, 1},
 		{"(*Dialer).DialContext", Method, 7},
 		{"(*Dialer).MultipathTCP", Method, 21},
@@ -7856,7 +7945,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*TCPConn).RemoteAddr", Method, 0},
 		{"(*TCPConn).SetDeadline", Method, 0},
 		{"(*TCPConn).SetKeepAlive", Method, 0},
+<<<<<<< HEAD
 		{"(*TCPConn).SetKeepAliveConfig", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*TCPConn).SetKeepAlivePeriod", Method, 2},
 		{"(*TCPConn).SetLinger", Method, 0},
 		{"(*TCPConn).SetNoDelay", Method, 0},
@@ -7970,7 +8062,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"DNSError.IsTimeout", Field, 0},
 		{"DNSError.Name", Field, 0},
 		{"DNSError.Server", Field, 0},
+<<<<<<< HEAD
 		{"DNSError.UnwrapErr", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"DefaultResolver", Var, 8},
 		{"Dial", Func, 0},
 		{"DialIP", Func, 0},
@@ -7986,7 +8081,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"Dialer.DualStack", Field, 2},
 		{"Dialer.FallbackDelay", Field, 5},
 		{"Dialer.KeepAlive", Field, 3},
+<<<<<<< HEAD
 		{"Dialer.KeepAliveConfig", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Dialer.LocalAddr", Field, 1},
 		{"Dialer.Resolver", Field, 8},
 		{"Dialer.Timeout", Field, 1},
@@ -8039,16 +8137,22 @@ var PackageSymbols = map[string][]Symbol{
 		{"Interfaces", Func, 0},
 		{"InvalidAddrError", Type, 0},
 		{"JoinHostPort", Func, 0},
+<<<<<<< HEAD
 		{"KeepAliveConfig", Type, 23},
 		{"KeepAliveConfig.Count", Field, 23},
 		{"KeepAliveConfig.Enable", Field, 23},
 		{"KeepAliveConfig.Idle", Field, 23},
 		{"KeepAliveConfig.Interval", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Listen", Func, 0},
 		{"ListenConfig", Type, 11},
 		{"ListenConfig.Control", Field, 11},
 		{"ListenConfig.KeepAlive", Field, 13},
+<<<<<<< HEAD
 		{"ListenConfig.KeepAliveConfig", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"ListenIP", Func, 0},
 		{"ListenMulticastUDP", Func, 0},
 		{"ListenPacket", Func, 0},
@@ -8137,7 +8241,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Request).Context", Method, 7},
 		{"(*Request).Cookie", Method, 0},
 		{"(*Request).Cookies", Method, 0},
+<<<<<<< HEAD
 		{"(*Request).CookiesNamed", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*Request).FormFile", Method, 0},
 		{"(*Request).FormValue", Method, 0},
 		{"(*Request).MultipartReader", Method, 0},
@@ -8205,9 +8312,13 @@ var PackageSymbols = map[string][]Symbol{
 		{"Cookie.HttpOnly", Field, 0},
 		{"Cookie.MaxAge", Field, 0},
 		{"Cookie.Name", Field, 0},
+<<<<<<< HEAD
 		{"Cookie.Partitioned", Field, 23},
 		{"Cookie.Path", Field, 0},
 		{"Cookie.Quoted", Field, 23},
+=======
+		{"Cookie.Path", Field, 0},
+>>>>>>> github/release-v0.56.x
 		{"Cookie.Raw", Field, 0},
 		{"Cookie.RawExpires", Field, 0},
 		{"Cookie.SameSite", Field, 11},
@@ -8284,9 +8395,13 @@ var PackageSymbols = map[string][]Symbol{
 		{"NoBody", Var, 8},
 		{"NotFound", Func, 0},
 		{"NotFoundHandler", Func, 0},
+<<<<<<< HEAD
 		{"ParseCookie", Func, 23},
 		{"ParseHTTPVersion", Func, 0},
 		{"ParseSetCookie", Func, 23},
+=======
+		{"ParseHTTPVersion", Func, 0},
+>>>>>>> github/release-v0.56.x
 		{"ParseTime", Func, 1},
 		{"Post", Func, 0},
 		{"PostForm", Func, 0},
@@ -8313,7 +8428,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"Request.Host", Field, 0},
 		{"Request.Method", Field, 0},
 		{"Request.MultipartForm", Field, 0},
+<<<<<<< HEAD
 		{"Request.Pattern", Field, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Request.PostForm", Field, 1},
 		{"Request.Proto", Field, 0},
 		{"Request.ProtoMajor", Field, 0},
@@ -8515,7 +8633,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"DefaultRemoteAddr", Const, 0},
 		{"NewRecorder", Func, 0},
 		{"NewRequest", Func, 7},
+<<<<<<< HEAD
 		{"NewRequestWithContext", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"NewServer", Func, 0},
 		{"NewTLSServer", Func, 0},
 		{"NewUnstartedServer", Func, 0},
@@ -8980,7 +9101,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"Chown", Func, 0},
 		{"Chtimes", Func, 0},
 		{"Clearenv", Func, 0},
+<<<<<<< HEAD
 		{"CopyFS", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Create", Func, 0},
 		{"CreateTemp", Func, 16},
 		{"DevNull", Const, 0},
@@ -9214,7 +9338,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"IsLocal", Func, 20},
 		{"Join", Func, 0},
 		{"ListSeparator", Const, 0},
+<<<<<<< HEAD
 		{"Localize", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Match", Func, 0},
 		{"Rel", Func, 0},
 		{"Separator", Const, 0},
@@ -9297,8 +9424,11 @@ var PackageSymbols = map[string][]Symbol{
 		{"(Value).Pointer", Method, 0},
 		{"(Value).Recv", Method, 0},
 		{"(Value).Send", Method, 0},
+<<<<<<< HEAD
 		{"(Value).Seq", Method, 23},
 		{"(Value).Seq2", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(Value).Set", Method, 0},
 		{"(Value).SetBool", Method, 0},
 		{"(Value).SetBytes", Method, 0},
@@ -9381,7 +9511,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"SelectSend", Const, 1},
 		{"SendDir", Const, 0},
 		{"Slice", Const, 0},
+<<<<<<< HEAD
 		{"SliceAt", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"SliceHeader", Type, 0},
 		{"SliceHeader.Cap", Field, 0},
 		{"SliceHeader.Data", Field, 0},
@@ -9723,7 +9856,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"BuildSetting", Type, 18},
 		{"BuildSetting.Key", Field, 18},
 		{"BuildSetting.Value", Field, 18},
+<<<<<<< HEAD
 		{"CrashOptions", Type, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"FreeOSMemory", Func, 1},
 		{"GCStats", Type, 1},
 		{"GCStats.LastGC", Field, 1},
@@ -9741,7 +9877,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"PrintStack", Func, 0},
 		{"ReadBuildInfo", Func, 12},
 		{"ReadGCStats", Func, 1},
+<<<<<<< HEAD
 		{"SetCrashOutput", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"SetGCPercent", Func, 1},
 		{"SetMaxStack", Func, 2},
 		{"SetMaxThreads", Func, 2},
@@ -9812,6 +9951,7 @@ var PackageSymbols = map[string][]Symbol{
 		{"WithRegion", Func, 11},
 	},
 	"slices": {
+<<<<<<< HEAD
 		{"All", Func, 23},
 		{"AppendSeq", Func, 23},
 		{"Backward", Func, 23},
@@ -9821,6 +9961,12 @@ var PackageSymbols = map[string][]Symbol{
 		{"Clip", Func, 21},
 		{"Clone", Func, 21},
 		{"Collect", Func, 23},
+=======
+		{"BinarySearch", Func, 21},
+		{"BinarySearchFunc", Func, 21},
+		{"Clip", Func, 21},
+		{"Clone", Func, 21},
+>>>>>>> github/release-v0.56.x
 		{"Compact", Func, 21},
 		{"CompactFunc", Func, 21},
 		{"Compare", Func, 21},
@@ -9842,16 +9988,22 @@ var PackageSymbols = map[string][]Symbol{
 		{"MaxFunc", Func, 21},
 		{"Min", Func, 21},
 		{"MinFunc", Func, 21},
+<<<<<<< HEAD
 		{"Repeat", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Replace", Func, 21},
 		{"Reverse", Func, 21},
 		{"Sort", Func, 21},
 		{"SortFunc", Func, 21},
 		{"SortStableFunc", Func, 21},
+<<<<<<< HEAD
 		{"Sorted", Func, 23},
 		{"SortedFunc", Func, 23},
 		{"SortedStableFunc", Func, 23},
 		{"Values", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 	},
 	"sort": {
 		{"(Float64Slice).Len", Method, 0},
@@ -10016,14 +10168,20 @@ var PackageSymbols = map[string][]Symbol{
 		{"TrimSpace", Func, 0},
 		{"TrimSuffix", Func, 1},
 	},
+<<<<<<< HEAD
 	"structs": {
 		{"HostLayout", Type, 23},
 	},
+=======
+>>>>>>> github/release-v0.56.x
 	"sync": {
 		{"(*Cond).Broadcast", Method, 0},
 		{"(*Cond).Signal", Method, 0},
 		{"(*Cond).Wait", Method, 0},
+<<<<<<< HEAD
 		{"(*Map).Clear", Method, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"(*Map).CompareAndDelete", Method, 20},
 		{"(*Map).CompareAndSwap", Method, 20},
 		{"(*Map).Delete", Method, 9},
@@ -10070,6 +10228,7 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Bool).Store", Method, 19},
 		{"(*Bool).Swap", Method, 19},
 		{"(*Int32).Add", Method, 19},
+<<<<<<< HEAD
 		{"(*Int32).And", Method, 23},
 		{"(*Int32).CompareAndSwap", Method, 19},
 		{"(*Int32).Load", Method, 19},
@@ -10081,6 +10240,15 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Int64).CompareAndSwap", Method, 19},
 		{"(*Int64).Load", Method, 19},
 		{"(*Int64).Or", Method, 23},
+=======
+		{"(*Int32).CompareAndSwap", Method, 19},
+		{"(*Int32).Load", Method, 19},
+		{"(*Int32).Store", Method, 19},
+		{"(*Int32).Swap", Method, 19},
+		{"(*Int64).Add", Method, 19},
+		{"(*Int64).CompareAndSwap", Method, 19},
+		{"(*Int64).Load", Method, 19},
+>>>>>>> github/release-v0.56.x
 		{"(*Int64).Store", Method, 19},
 		{"(*Int64).Swap", Method, 19},
 		{"(*Pointer).CompareAndSwap", Method, 19},
@@ -10088,6 +10256,7 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Pointer).Store", Method, 19},
 		{"(*Pointer).Swap", Method, 19},
 		{"(*Uint32).Add", Method, 19},
+<<<<<<< HEAD
 		{"(*Uint32).And", Method, 23},
 		{"(*Uint32).CompareAndSwap", Method, 19},
 		{"(*Uint32).Load", Method, 19},
@@ -10106,6 +10275,20 @@ var PackageSymbols = map[string][]Symbol{
 		{"(*Uintptr).CompareAndSwap", Method, 19},
 		{"(*Uintptr).Load", Method, 19},
 		{"(*Uintptr).Or", Method, 23},
+=======
+		{"(*Uint32).CompareAndSwap", Method, 19},
+		{"(*Uint32).Load", Method, 19},
+		{"(*Uint32).Store", Method, 19},
+		{"(*Uint32).Swap", Method, 19},
+		{"(*Uint64).Add", Method, 19},
+		{"(*Uint64).CompareAndSwap", Method, 19},
+		{"(*Uint64).Load", Method, 19},
+		{"(*Uint64).Store", Method, 19},
+		{"(*Uint64).Swap", Method, 19},
+		{"(*Uintptr).Add", Method, 19},
+		{"(*Uintptr).CompareAndSwap", Method, 19},
+		{"(*Uintptr).Load", Method, 19},
+>>>>>>> github/release-v0.56.x
 		{"(*Uintptr).Store", Method, 19},
 		{"(*Uintptr).Swap", Method, 19},
 		{"(*Value).CompareAndSwap", Method, 17},
@@ -10117,11 +10300,14 @@ var PackageSymbols = map[string][]Symbol{
 		{"AddUint32", Func, 0},
 		{"AddUint64", Func, 0},
 		{"AddUintptr", Func, 0},
+<<<<<<< HEAD
 		{"AndInt32", Func, 23},
 		{"AndInt64", Func, 23},
 		{"AndUint32", Func, 23},
 		{"AndUint64", Func, 23},
 		{"AndUintptr", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Bool", Type, 19},
 		{"CompareAndSwapInt32", Func, 0},
 		{"CompareAndSwapInt64", Func, 0},
@@ -10137,11 +10323,14 @@ var PackageSymbols = map[string][]Symbol{
 		{"LoadUint32", Func, 0},
 		{"LoadUint64", Func, 0},
 		{"LoadUintptr", Func, 0},
+<<<<<<< HEAD
 		{"OrInt32", Func, 23},
 		{"OrInt64", Func, 23},
 		{"OrUint32", Func, 23},
 		{"OrUint64", Func, 23},
 		{"OrUintptr", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"Pointer", Type, 19},
 		{"StoreInt32", Func, 0},
 		{"StoreInt64", Func, 0},
@@ -16304,7 +16493,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"WSAEACCES", Const, 2},
 		{"WSAECONNABORTED", Const, 9},
 		{"WSAECONNRESET", Const, 3},
+<<<<<<< HEAD
 		{"WSAENOPROTOOPT", Const, 23},
+=======
+>>>>>>> github/release-v0.56.x
 		{"WSAEnumProtocols", Func, 2},
 		{"WSAID_CONNECTEX", Var, 1},
 		{"WSAIoctl", Func, 0},
@@ -17389,7 +17581,10 @@ var PackageSymbols = map[string][]Symbol{
 		{"Encode", Func, 0},
 		{"EncodeRune", Func, 0},
 		{"IsSurrogate", Func, 0},
+<<<<<<< HEAD
 		{"RuneLen", Func, 23},
+=======
+>>>>>>> github/release-v0.56.x
 	},
 	"unicode/utf8": {
 		{"AppendRune", Func, 18},
@@ -17412,11 +17607,14 @@ var PackageSymbols = map[string][]Symbol{
 		{"ValidRune", Func, 1},
 		{"ValidString", Func, 0},
 	},
+<<<<<<< HEAD
 	"unique": {
 		{"(Handle).Value", Method, 23},
 		{"Handle", Type, 23},
 		{"Make", Func, 23},
 	},
+=======
+>>>>>>> github/release-v0.56.x
 	"unsafe": {
 		{"Add", Func, 0},
 		{"Alignof", Func, 0},

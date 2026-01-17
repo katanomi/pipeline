@@ -1606,7 +1606,11 @@ func (fr *Framer) readMetaFrame(hf *HeadersFrame) (Frame, error) {
 			}
 			// It would be nice to send a RST_STREAM before sending the GOAWAY,
 			// but the structure of the server's frame writer makes this difficult.
+<<<<<<< HEAD
 			return mh, ConnectionError(ErrCodeProtocol)
+=======
+			return nil, ConnectionError(ErrCodeProtocol)
+>>>>>>> github/release-v0.56.x
 		}
 
 		// Also close the connection after any CONTINUATION frame following an
@@ -1618,7 +1622,11 @@ func (fr *Framer) readMetaFrame(hf *HeadersFrame) (Frame, error) {
 			}
 			// It would be nice to send a RST_STREAM before sending the GOAWAY,
 			// but the structure of the server's frame writer makes this difficult.
+<<<<<<< HEAD
 			return mh, ConnectionError(ErrCodeProtocol)
+=======
+			return nil, ConnectionError(ErrCodeProtocol)
+>>>>>>> github/release-v0.56.x
 		}
 
 		if _, err := hdec.Write(frag); err != nil {

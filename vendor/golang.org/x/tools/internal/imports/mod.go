@@ -115,19 +115,28 @@ func newModuleResolver(e *ProcessEnv, moduleCacheCache *DirInfoCache) (*ModuleRe
 	var mainModVendor *gocommand.ModuleJSON    // for module vendoring
 	var mainModsVendor []*gocommand.ModuleJSON // for workspace vendoring
 
+<<<<<<< HEAD
 	goWork := r.env.Env["GOWORK"]
 	if len(goWork) == 0 {
+=======
+	// Module vendor directories are ignored in workspace mode:
+	// https://go.googlesource.com/proposal/+/master/design/45713-workspace.md
+	if len(r.env.Env["GOWORK"]) == 0 {
+>>>>>>> github/release-v0.56.x
 		// TODO(rfindley): VendorEnabled runs the go command to get GOFLAGS, but
 		// they should be available from the ProcessEnv. Can we avoid the redundant
 		// invocation?
 		vendorEnabled, mainModVendor, err = gocommand.VendorEnabled(context.TODO(), inv, r.env.GocmdRunner)
 		if err != nil {
 			return nil, err
+<<<<<<< HEAD
 		}
 	} else {
 		vendorEnabled, mainModsVendor, err = gocommand.WorkspaceVendorEnabled(context.Background(), inv, r.env.GocmdRunner)
 		if err != nil {
 			return nil, err
+=======
+>>>>>>> github/release-v0.56.x
 		}
 	}
 

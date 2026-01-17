@@ -26,6 +26,7 @@ var (
 const (
 	payload      = 0x7f // 0111 1111
 	continuation = 0x80 // 1000 0000
+<<<<<<< HEAD
 
 	// maxPatchPreemptionSize defines what is the max size of bytes to be
 	// premptively made available for a patch operation.
@@ -33,6 +34,8 @@ const (
 
 	// minDeltaSize defines the smallest size for a delta.
 	minDeltaSize = 4
+=======
+>>>>>>> github/release-v0.56.x
 )
 
 type offset struct {

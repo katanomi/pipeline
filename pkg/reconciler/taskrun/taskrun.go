@@ -48,7 +48,6 @@ import (
 	resolution "github.com/tektoncd/pipeline/pkg/resolution/resource"
 	"github.com/tektoncd/pipeline/pkg/spire"
 	"github.com/tektoncd/pipeline/pkg/taskrunmetrics"
-	_ "github.com/tektoncd/pipeline/pkg/taskrunmetrics/fake" // Make sure the taskrunmetrics are setup
 	"github.com/tektoncd/pipeline/pkg/trustedresources"
 	"github.com/tektoncd/pipeline/pkg/workspace"
 	"go.opentelemetry.io/otel/attribute"
@@ -777,6 +776,12 @@ func (c *Reconciler) failTaskRun(ctx context.Context, tr *v1.TaskRun, reason v1.
 		return nil
 	}
 
+	// When the TaskRun is failed, we mark all running/waiting steps as failed
+	// This is regardless of what happens with the Pod, which may be cancelled,
+	// deleted, non existing or fail to delete
+	// See https://github.com/tektoncd/pipeline/issues/8293 for more details.
+	terminateStepsInPod(tr, reason)
+
 	var err error
 	if reason == v1.TaskRunReasonCancelled && (config.FromContextOrDefaults(ctx).FeatureFlags.EnableKeepPodOnCancel) {
 		logger.Infof("Canceling task run %q by entrypoint", tr.Name)
@@ -789,7 +794,6 @@ func (c *Reconciler) failTaskRun(ctx context.Context, tr *v1.TaskRun, reason v1.
 		return err
 	}
 
-	terminateStepsInPod(tr, reason)
 	return nil
 }
 
@@ -852,7 +856,6 @@ func (c *Reconciler) createPod(ctx context.Context, ts *v1.TaskSpec, tr *v1.Task
 
 	var err error
 	ts, err = workspace.Apply(ctx, *ts, tr.Spec.Workspaces, workspaceVolumes)
-
 	if err != nil {
 		logger.Errorf("Failed to create a pod for taskrun: %s due to workspace error %v", tr.Name, err)
 		return nil, err
