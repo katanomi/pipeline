@@ -2532,7 +2532,7 @@ func TestResolvePipelineRun_VerificationFailed(t *testing.T) {
 	for _, pt := range pts {
 		rt, _ := ResolvePipelineTask(context.Background(), pr, getTask, getTaskRun, nopGetCustomRun, pt, nil)
 		if d := cmp.Diff(verificationResult, rt.ResolvedTask.VerificationResult, cmpopts.EquateErrors()); d != "" {
-			t.Errorf(diff.PrintWantGot(d))
+			t.Errorf("%s", diff.PrintWantGot(d))
 		}
 	}
 }
@@ -5234,6 +5234,17 @@ func TestValidateParamEnumSubset_Valid(t *testing.T) {
 				},
 			},
 			rt: nil,
+		}, {
+			name: "invalid param syntax - pass",
+			params: []v1.Param{
+				{
+					Name: "resolved-task-p1",
+					Value: v1.ParamValue{
+						StringVal: "$(params.p1.aaa.bbb)",
+					},
+				},
+			},
+			rt: &resources.ResolvedTask{},
 		},
 	}
 
@@ -5308,24 +5319,13 @@ func TestValidateParamEnumSubset_Invalid(t *testing.T) {
 			},
 		},
 		wantErr: errors.New("pipeline param \"p1\" has no enum, but referenced in \"ref1\" task has enums: [v1 v3]"),
-	}, {
-		name: "invalid param syntax - failure",
-		params: []v1.Param{
-			{
-				Name: "resolved-task-p1",
-				Value: v1.ParamValue{
-					StringVal: "$(params.p1.aaa.bbb)",
-				},
-			},
-		},
-		rt:      &resources.ResolvedTask{},
-		wantErr: errors.New("unexpected error in ExtractVariablesFromString: Invalid referencing of parameters in \"$(params.p1.aaa.bbb)\"! Only two dot-separated components after the prefix \"params\" are allowed."),
 	}}
 
 	for _, tc := range tcs {
 		err := ValidateParamEnumSubset(tc.params, tc.pipelinePs, tc.rt)
 		if err == nil {
 			t.Errorf("expecting error in ValidateParamEnumSubset: %s, but got nil", err)
+			continue
 		}
 		if d := cmp.Diff(tc.wantErr.Error(), err.Error()); d != "" {
 			t.Errorf("expecting error does not match in ValidateParamEnumSubset: %s", diff.PrintWantGot(d))

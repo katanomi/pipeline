@@ -854,6 +854,11 @@ func ValidateParamEnumSubset(pipelineTaskParams []v1.Param, pipelineParamSpecs [
 			continue
 		}
 
+		// When the matrix Task has no TaskRun or TaskSpec, skip subset validation.
+		if rt == nil || rt.TaskSpec == nil {
+			continue
+		}
+
 		// resolve pipeline-level and pipelineTask-level enums
 		paramName := substitution.TrimArrayIndex(res[0])
 		pipelineParam := getParamFromName(paramName, pipelineParamSpecs)
@@ -863,7 +868,7 @@ func ValidateParamEnumSubset(pipelineTaskParams []v1.Param, pipelineParamSpecs [
 		// we only validate the enum subset requirement for string typed param.
 		// If there is no task-level enum (allowing any value), any pipeline-level enum is allowed
 		if pipelineParam.Type != v1.ParamTypeString || len(resolvedTaskParam.Enum) == 0 {
-			return nil
+			continue
 		}
 
 		// if pipelin-level enum is empty (allowing any value) but task-level enum is not, it is not a "subset"
