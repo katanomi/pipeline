@@ -13,6 +13,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -115,28 +116,19 @@ func newModuleResolver(e *ProcessEnv, moduleCacheCache *DirInfoCache) (*ModuleRe
 	var mainModVendor *gocommand.ModuleJSON    // for module vendoring
 	var mainModsVendor []*gocommand.ModuleJSON // for workspace vendoring
 
-<<<<<<< HEAD
 	goWork := r.env.Env["GOWORK"]
 	if len(goWork) == 0 {
-=======
-	// Module vendor directories are ignored in workspace mode:
-	// https://go.googlesource.com/proposal/+/master/design/45713-workspace.md
-	if len(r.env.Env["GOWORK"]) == 0 {
->>>>>>> github/release-v0.56.x
 		// TODO(rfindley): VendorEnabled runs the go command to get GOFLAGS, but
 		// they should be available from the ProcessEnv. Can we avoid the redundant
 		// invocation?
 		vendorEnabled, mainModVendor, err = gocommand.VendorEnabled(context.TODO(), inv, r.env.GocmdRunner)
 		if err != nil {
 			return nil, err
-<<<<<<< HEAD
 		}
 	} else {
 		vendorEnabled, mainModsVendor, err = gocommand.WorkspaceVendorEnabled(context.Background(), inv, r.env.GocmdRunner)
 		if err != nil {
 			return nil, err
-=======
->>>>>>> github/release-v0.56.x
 		}
 	}
 
@@ -159,8 +151,8 @@ func newModuleResolver(e *ProcessEnv, moduleCacheCache *DirInfoCache) (*ModuleRe
 				Path: "",
 				Dir:  filepath.Join(filepath.Dir(goWork), "vendor"),
 			}
-			r.modsByModPath = append(append([]*gocommand.ModuleJSON{}, mainModsVendor...), r.dummyVendorMod)
-			r.modsByDir = append(append([]*gocommand.ModuleJSON{}, mainModsVendor...), r.dummyVendorMod)
+			r.modsByModPath = append(slices.Clone(mainModsVendor), r.dummyVendorMod)
+			r.modsByDir = append(slices.Clone(mainModsVendor), r.dummyVendorMod)
 		}
 	} else {
 		// Vendor mode is off, so run go list -m ... to find everything.
@@ -254,7 +246,10 @@ func newModuleResolver(e *ProcessEnv, moduleCacheCache *DirInfoCache) (*ModuleRe
 //  2. Use this to separate module cache scanning from other scanning.
 func gomodcacheForEnv(goenv map[string]string) string {
 	if gmc := goenv["GOMODCACHE"]; gmc != "" {
-		return gmc
+		// golang/go#67156: ensure that the module cache is clean, since it is
+		// assumed as a prefix to directories scanned by gopathwalk, which are
+		// themselves clean.
+		return filepath.Clean(gmc)
 	}
 	gopaths := filepath.SplitList(goenv["GOPATH"])
 	if len(gopaths) == 0 {
@@ -749,8 +744,8 @@ func (r *ModuleResolver) loadExports(ctx context.Context, pkg *pkg, includeTest 
 
 func (r *ModuleResolver) scanDirForPackage(root gopathwalk.Root, dir string) directoryPackageInfo {
 	subdir := ""
-	if dir != root.Path {
-		subdir = dir[len(root.Path)+len("/"):]
+	if prefix := root.Path + string(filepath.Separator); strings.HasPrefix(dir, prefix) {
+		subdir = dir[len(prefix):]
 	}
 	importPath := filepath.ToSlash(subdir)
 	if strings.HasPrefix(importPath, "vendor/") {

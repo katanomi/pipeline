@@ -116,11 +116,7 @@ config := &ssh.ClientConfig{
 
 ## License
 
-<<<<<<< HEAD
 **Source code copyright 2025 Skeema LLC and the Skeema Knownhosts authors**
-=======
-**Source code copyright 2024 Skeema LLC and the Skeema Knownhosts authors**
->>>>>>> github/release-v0.56.x
 
 ```text
 Licensed under the Apache License, Version 2.0 (the "License");

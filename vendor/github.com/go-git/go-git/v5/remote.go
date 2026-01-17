@@ -492,7 +492,6 @@ func (r *Remote) fetch(ctx context.Context, o *FetchOptions) (sto storer.Referen
 	}
 
 	if !updated && !updatedPrune {
-<<<<<<< HEAD
 		// No references updated, but may have fetched new objects, check if we now have any of our wants
 		for _, hash := range req.Wants {
 			exists, _ := objectExists(r.s, hash)
@@ -505,9 +504,6 @@ func (r *Remote) fetch(ctx context.Context, o *FetchOptions) (sto storer.Referen
 		if !updated {
 			return remoteRefs, NoErrAlreadyUpToDate
 		}
-=======
-		return remoteRefs, NoErrAlreadyUpToDate
->>>>>>> github/release-v0.56.x
 	}
 
 	return remoteRefs, nil

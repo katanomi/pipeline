@@ -56,7 +56,6 @@ func (w *Worktree) Commit(msg string, opts *CommitOptions) (plumbing.Hash, error
 		opts.Parents = nil
 		if len(headCommit.ParentHashes) != 0 {
 			opts.Parents = []plumbing.Hash{headCommit.ParentHashes[0]}
-<<<<<<< HEAD
 		}
 	}
 
@@ -91,24 +90,6 @@ func (w *Worktree) Commit(msg string, opts *CommitOptions) (plumbing.Hash, error
 
 	if treeHash == previousTree && !opts.AllowEmptyCommits {
 		return plumbing.ZeroHash, ErrEmptyCommit
-=======
-		}
-	}
-
-	idx, err := w.r.Storer.Index()
-	if err != nil {
-		return plumbing.ZeroHash, err
-	}
-
-	h := &buildTreeHelper{
-		fs: w.Filesystem,
-		s:  w.r.Storer,
-	}
-
-	treeHash, err = h.BuildTree(idx, opts)
-	if err != nil {
-		return plumbing.ZeroHash, err
->>>>>>> github/release-v0.56.x
 	}
 
 	commit, err := w.buildCommitObject(msg, opts, treeHash)
@@ -188,7 +169,6 @@ func (w *Worktree) buildCommitObject(msg string, opts *CommitOptions, tree plumb
 	return w.r.Storer.SetEncodedObject(obj)
 }
 
-<<<<<<< HEAD
 func (w *Worktree) sanitize(signature object.Signature) object.Signature {
 	return object.Signature{
 		Name:  invalidCharactersRe.ReplaceAllString(signature.Name, ""),
@@ -197,8 +177,6 @@ func (w *Worktree) sanitize(signature object.Signature) object.Signature {
 	}
 }
 
-=======
->>>>>>> github/release-v0.56.x
 type gpgSigner struct {
 	key *openpgp.Entity
 	cfg *packet.Config

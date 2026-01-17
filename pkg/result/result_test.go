@@ -55,7 +55,7 @@ func TestRunResult_UnmarshalJSON(t *testing.T) {
 				t.Errorf("Unexpected error when unmarshalling the json into RunResult")
 			}
 			if d := cmp.Diff(tc.pr, pipRes); d != "" {
-				t.Errorf(diff.PrintWantGot(d))
+				t.Errorf("%s", diff.PrintWantGot(d))
 			}
 		})
 	}

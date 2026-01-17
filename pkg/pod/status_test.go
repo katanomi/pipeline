@@ -2440,7 +2440,7 @@ func TestGetStepResultsFromSidecarLogs(t *testing.T) {
 		t.Errorf("did not expect an error but got: %v", err)
 	}
 	if d := cmp.Diff(want, got); d != "" {
-		t.Errorf(diff.PrintWantGot(d))
+		t.Errorf("%s", diff.PrintWantGot(d))
 	}
 }
 
@@ -2455,7 +2455,7 @@ func TestGetStepResultsFromSidecarLogs_Error(t *testing.T) {
 	_, err := getStepResultsFromSidecarLogs(sidecarLogResults, stepName)
 	wantErr := fmt.Errorf("invalid string %s-%s : expected somtthing that looks like <stepName>.<resultName>", stepName, resultName)
 	if d := cmp.Diff(wantErr.Error(), err.Error()); d != "" {
-		t.Errorf(diff.PrintWantGot(d))
+		t.Errorf("%s", diff.PrintWantGot(d))
 	}
 }
 
@@ -2476,6 +2476,6 @@ func TestGetTaskResultsFromSidecarLogs(t *testing.T) {
 	}}
 	got := getTaskResultsFromSidecarLogs(sidecarLogResults)
 	if d := cmp.Diff(want, got); d != "" {
-		t.Errorf(diff.PrintWantGot(d))
+		t.Errorf("%s", diff.PrintWantGot(d))
 	}
 }

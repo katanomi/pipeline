@@ -1,27 +1,16 @@
 module github.com/tektoncd/pipeline
 
-<<<<<<< HEAD
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
-=======
-go 1.21
->>>>>>> github/release-v0.56.x
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ahmetb/gen-crd-api-reference-docs v0.3.1-0.20220720053627-e327d0730470 // Waiting for https://github.com/ahmetb/gen-crd-api-reference-docs/pull/43/files to merge
-<<<<<<< HEAD
 	github.com/cloudevents/sdk-go/v2 v2.15.2
-	github.com/containerd/containerd v1.7.27
+	github.com/containerd/containerd v1.7.29
 	github.com/go-git/go-git/v5 v5.14.0
 	github.com/google/go-cmp v0.7.0
-=======
-	github.com/cloudevents/sdk-go/v2 v2.14.0
-	github.com/containerd/containerd v1.7.11
-	github.com/go-git/go-git/v5 v5.12.0
-	github.com/google/go-cmp v0.6.0
->>>>>>> github/release-v0.56.x
 	github.com/google/go-containerregistry v0.17.0
 	github.com/google/uuid v1.6.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -38,7 +27,7 @@ require (
 	go.opencensus.io v0.24.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56
-	golang.org/x/oauth2 v0.16.0 // indirect
+	golang.org/x/oauth2 v0.30.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0
 	k8s.io/api v0.27.1
 	k8s.io/apimachinery v0.29.0
@@ -60,11 +49,7 @@ replace (
 
 require (
 	code.gitea.io/sdk/gitea v0.16.0
-<<<<<<< HEAD
 	github.com/go-jose/go-jose/v3 v3.0.4
-=======
-	github.com/go-jose/go-jose/v3 v3.0.3
->>>>>>> github/release-v0.56.x
 	github.com/goccy/kpoward v0.1.0
 	github.com/google/cel-go v0.18.1
 	github.com/google/go-containerregistry/pkg/authn/k8schain v0.0.0-20230625233257-b8504803389b
@@ -81,11 +66,7 @@ require (
 )
 
 require (
-<<<<<<< HEAD
 	github.com/ProtonMail/go-crypto v1.1.5 // indirect
-=======
-	github.com/ProtonMail/go-crypto v1.0.0 // indirect
->>>>>>> github/release-v0.56.x
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.6.2
@@ -97,7 +78,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/iam v1.1.5 // indirect
 	cloud.google.com/go/kms v1.15.5 // indirect
 	dario.cat/mergo v1.0.0 // indirect
@@ -113,11 +94,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/kms v1.27.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.21.6 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
-<<<<<<< HEAD
-	github.com/cloudflare/circl v1.6.0 // indirect
-=======
-	github.com/cloudflare/circl v1.3.7 // indirect
->>>>>>> github/release-v0.56.x
+	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/cyphar/filepath-securejoin v0.4.1 // indirect
@@ -149,11 +126,7 @@ require (
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.8.0 // indirect
-<<<<<<< HEAD
 	github.com/skeema/knownhosts v1.3.1 // indirect
-=======
-	github.com/skeema/knownhosts v1.2.2 // indirect
->>>>>>> github/release-v0.56.x
 	github.com/stoewer/go-strcase v1.2.0 // indirect
 	github.com/titanous/rocacheck v0.0.0-20171023193734-afe73141d399 // indirect
 	github.com/zeebo/errs v1.3.0 // indirect
@@ -166,7 +139,6 @@ require (
 )
 
 require (
-	cloud.google.com/go/compute v1.23.3 // indirect
 	contrib.go.opencensus.io/exporter/ocagent v0.7.1-0.20200907061046-05415f1de66d // indirect
 	contrib.go.opencensus.io/exporter/prometheus v0.4.0 // indirect
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
@@ -204,7 +176,7 @@ require (
 	github.com/dimchansky/utfbom v1.1.1 // indirect
 	github.com/docker/cli v24.0.0+incompatible // indirect
 	github.com/docker/distribution v2.8.2+incompatible // indirect
-	github.com/docker/docker v26.1.5+incompatible // indirect
+	github.com/docker/docker v28.0.4+incompatible // indirect
 	github.com/docker/docker-credential-helpers v0.7.0 // indirect
 	github.com/evanphx/json-patch v4.12.0+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.6.0 // indirect
@@ -247,38 +219,21 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-<<<<<<< HEAD
 	github.com/stretchr/testify v1.10.0
-=======
-	github.com/stretchr/testify v1.9.0
->>>>>>> github/release-v0.56.x
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/automaxprocs v1.4.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-<<<<<<< HEAD
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/mod v0.19.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/term v0.32.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
-	golang.org/x/time v0.5.0 // indirect
-	golang.org/x/tools v0.23.0 // indirect
-=======
-	golang.org/x/crypto v0.22.0 // indirect
-	golang.org/x/mod v0.17.0 // indirect
-	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sync v0.7.0
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/term v0.19.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/time v0.5.0 // indirect
-	golang.org/x/tools v0.20.0 // indirect
->>>>>>> github/release-v0.56.x
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/mod v0.29.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sync v0.18.0
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/term v0.37.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
+	golang.org/x/time v0.12.0 // indirect
+	golang.org/x/tools v0.38.0 // indirect
 	google.golang.org/api v0.156.0 // indirect
-	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20231212172506-995d672761c0 // indirect
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.35.2

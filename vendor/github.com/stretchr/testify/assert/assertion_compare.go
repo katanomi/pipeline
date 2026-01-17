@@ -376,26 +376,6 @@ func compare(obj1, obj2 interface{}, kind reflect.Kind) (compareResult, bool) {
 				return compareLess, true
 			}
 		}
-	case reflect.Uintptr:
-		{
-			uintptrObj1, ok := obj1.(uintptr)
-			if !ok {
-				uintptrObj1 = obj1Value.Convert(uintptrType).Interface().(uintptr)
-			}
-			uintptrObj2, ok := obj2.(uintptr)
-			if !ok {
-				uintptrObj2 = obj2Value.Convert(uintptrType).Interface().(uintptr)
-			}
-			if uintptrObj1 > uintptrObj2 {
-				return compareGreater, true
-			}
-			if uintptrObj1 == uintptrObj2 {
-				return compareEqual, true
-			}
-			if uintptrObj1 < uintptrObj2 {
-				return compareLess, true
-			}
-		}
 	}
 
 	return compareEqual, false

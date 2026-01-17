@@ -19,13 +19,9 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/pmezard/go-difflib/difflib"
-<<<<<<< HEAD
 
 	// Wrapper around gopkg.in/yaml.v3
 	"github.com/stretchr/testify/assert/yaml"
-=======
-	"gopkg.in/yaml.v3"
->>>>>>> github/release-v0.56.x
 )
 
 //go:generate sh -c "cd ../_codegen && go build && cd - && ../_codegen/_codegen -output-package=assert -template=assertion_format.go.tmpl"
@@ -596,13 +592,8 @@ func truncatingFormat(data interface{}) string {
 	return value
 }
 
-<<<<<<< HEAD
 // EqualValues asserts that two objects are equal or convertible to the larger
 // type and equal.
-=======
-// EqualValues asserts that two objects are equal or convertible to the same types
-// and equal.
->>>>>>> github/release-v0.56.x
 //
 //	assert.EqualValues(t, uint32(123), int32(123))
 func EqualValues(t TestingT, expected, actual interface{}, msgAndArgs ...interface{}) bool {
@@ -644,24 +635,6 @@ func EqualExportedValues(t TestingT, expected, actual interface{}, msgAndArgs ..
 		return Fail(t, fmt.Sprintf("Types expected to match exactly\n\t%v != %v", aType, bType), msgAndArgs...)
 	}
 
-<<<<<<< HEAD
-=======
-	if aType.Kind() == reflect.Ptr {
-		aType = aType.Elem()
-	}
-	if bType.Kind() == reflect.Ptr {
-		bType = bType.Elem()
-	}
-
-	if aType.Kind() != reflect.Struct {
-		return Fail(t, fmt.Sprintf("Types expected to both be struct or pointer to struct \n\t%v != %v", aType.Kind(), reflect.Struct), msgAndArgs...)
-	}
-
-	if bType.Kind() != reflect.Struct {
-		return Fail(t, fmt.Sprintf("Types expected to both be struct or pointer to struct \n\t%v != %v", bType.Kind(), reflect.Struct), msgAndArgs...)
-	}
-
->>>>>>> github/release-v0.56.x
 	expected = copyExportedFields(expected)
 	actual = copyExportedFields(actual)
 
@@ -1996,16 +1969,10 @@ func (c *CollectT) Errorf(format string, args ...interface{}) {
 	c.errors = append(c.errors, fmt.Errorf(format, args...))
 }
 
-<<<<<<< HEAD
 // FailNow stops execution by calling runtime.Goexit.
 func (c *CollectT) FailNow() {
 	c.fail()
 	runtime.Goexit()
-=======
-// FailNow panics.
-func (*CollectT) FailNow() {
-	panic("Assertion failed")
->>>>>>> github/release-v0.56.x
 }
 
 // Deprecated: That was a method for internal usage that should not have been published. Now just panics.
@@ -2016,15 +1983,12 @@ func (*CollectT) Reset() {
 // Deprecated: That was a method for internal usage that should not have been published. Now just panics.
 func (*CollectT) Copy(TestingT) {
 	panic("Copy() is deprecated")
-<<<<<<< HEAD
 }
 
 func (c *CollectT) fail() {
 	if !c.failed() {
 		c.errors = []error{} // Make it non-nil to mark a failure.
 	}
-=======
->>>>>>> github/release-v0.56.x
 }
 
 func (c *CollectT) failed() bool {
@@ -2055,11 +2019,7 @@ func EventuallyWithT(t TestingT, condition func(collect *CollectT), waitFor time
 	}
 
 	var lastFinishedTickErrs []error
-<<<<<<< HEAD
 	ch := make(chan *CollectT, 1)
-=======
-	ch := make(chan []error, 1)
->>>>>>> github/release-v0.56.x
 
 	timer := time.NewTimer(waitFor)
 	defer timer.Stop()
@@ -2079,7 +2039,6 @@ func EventuallyWithT(t TestingT, condition func(collect *CollectT), waitFor time
 			go func() {
 				collect := new(CollectT)
 				defer func() {
-<<<<<<< HEAD
 					ch <- collect
 				}()
 				condition(collect)
@@ -2090,18 +2049,6 @@ func EventuallyWithT(t TestingT, condition func(collect *CollectT), waitFor time
 			}
 			// Keep the errors from the last ended condition, so that they can be copied to t if timeout is reached.
 			lastFinishedTickErrs = collect.errors
-=======
-					ch <- collect.errors
-				}()
-				condition(collect)
-			}()
-		case errs := <-ch:
-			if len(errs) == 0 {
-				return true
-			}
-			// Keep the errors from the last ended condition, so that they can be copied to t if timeout is reached.
-			lastFinishedTickErrs = errs
->>>>>>> github/release-v0.56.x
 			tick = ticker.C
 		}
 	}

@@ -380,7 +380,7 @@ func (r *Resolver) validateParams(ctx context.Context, paramsMap map[string]stri
 	}
 	if hubType, ok := paramsMap[ParamType]; ok {
 		if hubType != ArtifactHubType && hubType != TektonHubType {
-			return fmt.Errorf(fmt.Sprintf("type param must be %s or %s", ArtifactHubType, TektonHubType))
+			return fmt.Errorf("type param must be %s or %s", ArtifactHubType, TektonHubType)
 		}
 
 		if hubType == TektonHubType && r.TektonHubURL == "" {

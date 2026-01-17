@@ -335,35 +335,7 @@ func (hkcb HostKeyCallback) HostKeys(hostWithPort string) []ssh.PublicKey {
 // be returned instead. For proper CA support, see NewDB and
 // HostKeyDB.HostKeyAlgorithms instead.
 func (hkcb HostKeyCallback) HostKeyAlgorithms(hostWithPort string) (algos []string) {
-<<<<<<< HEAD
 	return hkcb.ToDB().HostKeyAlgorithms(hostWithPort)
-=======
-	// We ensure that algos never contains duplicates. This is done for robustness
-	// even though currently golang.org/x/crypto/ssh/knownhosts never exposes
-	// multiple keys of the same type. This way our behavior here is unaffected
-	// even if https://github.com/golang/go/issues/28870 is implemented, for
-	// example by https://github.com/golang/crypto/pull/254.
-	hostKeys := hkcb.HostKeys(hostWithPort)
-	seen := make(map[string]struct{}, len(hostKeys))
-	addAlgo := func(typ string) {
-		if _, already := seen[typ]; !already {
-			algos = append(algos, typ)
-			seen[typ] = struct{}{}
-		}
-	}
-	for _, key := range hostKeys {
-		typ := key.Type()
-		if typ == ssh.KeyAlgoRSA {
-			// KeyAlgoRSASHA256 and KeyAlgoRSASHA512 are only public key algorithms,
-			// not public key formats, so they can't appear as a PublicKey.Type.
-			// The corresponding PublicKey.Type is KeyAlgoRSA. See RFC 8332, Section 2.
-			addAlgo(ssh.KeyAlgoRSASHA512)
-			addAlgo(ssh.KeyAlgoRSASHA256)
-		}
-		addAlgo(typ)
-	}
-	return algos
->>>>>>> github/release-v0.56.x
 }
 
 // HostKeyAlgorithms is a convenience function for performing host key algorithm
