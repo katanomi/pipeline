@@ -21,13 +21,13 @@ refers to `TaskRuns` and `PipelineRuns` as `Runs` for the sake of brevity.
   - [Configuring `ssh-auth` authentication for Git](#configuring-ssh-auth-authentication-for-git)
   - [Using a custom port for SSH authentication](#using-a-custom-port-for-ssh-authentication)
   - [Using SSH authentication in `git` type `Tasks`](#using-ssh-authentication-in-git-type-tasks)
-- [Configuring authentication for Docker](#configuring-authentication-for-docker)
-  - [Configuring `basic-auth` authentication for Docker](#configuring-basic-auth-authentication-for-docker)
-  - [Configuring `docker*` authentication for Docker](#configuring-docker-authentication-for-docker)
+- [Configuring authentication for registry](#configuring-authentication-for-registry)
+  - [Configuring `basic-auth` authentication for registry](#configuring-basic-auth-authentication-for-registry)
+  - [Configuring `registry*` authentication for registry](#configuring-registry-authentication-for-registry)
 - [Technical reference](#technical-reference)
   - [`basic-auth` for Git](#basic-auth-for-git)
   - [`ssh-auth` for Git](#ssh-auth-for-git)
-  - [`basic-auth` for Docker](#basic-auth-for-docker)
+  - [`basic-auth` for registry](#basic-auth-for-registry)
   - [Errors and their meaning](#errors-and-their-meaning)
     - ["unsuccessful cred copy" Warning](#unsuccessful-cred-copy-warning)
       - [Multiple Steps with varying UIDs](#multiple-steps-with-varying-uids)
@@ -46,7 +46,7 @@ Tekton supports authentication via the Kubernetes first-class `Secret` types lis
 <table>
 	<thead>
 		<th>Git</th>
-		<th>Docker</th>
+		<th>registry</th>
 	</thead>
 	<tbody>
 		<tr>
@@ -66,7 +66,7 @@ supported `Secret` includes a [Tekton-specific annotation](#understanding-creden
 Tekton converts properly annotated `Secrets` of the supported types and stores them in a `Step's` container as follows:
 
  - **Git:** Tekton produces a ~/.gitconfig file or a ~/.ssh directory.
- - **Docker:** Tekton produces a ~/.docker/config.json file.
+ - **registry:** Tekton produces a ~/.registry/config.json file.
 
 Each `Secret` type supports multiple credentials covering multiple domains and establishes specific rules governing
 credential formatting and merging. Tekton follows those rules when merging credentials of each supported type.
@@ -81,14 +81,14 @@ TODO(#5357): Update docs to explain recommended methods of passing secrets in vi
 ## Understanding credential selection
 
 A `Run` might require multiple types of authentication. For example, a `Run` might require access to
-multiple private Git and Docker repositories. You must properly annotate each `Secret` to specify the
+multiple private Git and registry repositories. You must properly annotate each `Secret` to specify the
 domains for which Tekton can use the credentials that the `Secret` contains. Tekton **ignores** all
 `Secrets` that are not properly annotated.
 
-A credential annotation key must begin with `tekton.dev/git-` or `tekton.dev/docker-` and its value is the
+A credential annotation key must begin with `tekton.dev/git-` or `tekton.dev/registry-` and its value is the
 URL of the host for which you want Tekton to use that credential. In the following example, Tekton uses a
 `basic-auth` (username/password pair) `Secret` to access Git repositories at `github.com` and `gitlab.com`
-as well as Docker repositories at `gcr.io`:
+as well as registry repositories at `gcr.io`:
 
 ```yaml
 apiVersion: v1
@@ -97,7 +97,7 @@ metadata:
   annotations:
     tekton.dev/git-0: https://github.com
     tekton.dev/git-1: https://gitlab.com
-    tekton.dev/docker-0: https://gcr.io
+    tekton.dev/registry-0: https://gcr.io
 type: kubernetes.io/basic-auth
 stringData:
   username: <cleartext username>
@@ -134,7 +134,7 @@ The following are considerations for executing `Runs` as a non-root user:
   Specifying a UID that has no valid home directory results in authentication failure.
 - Since SSH authentication ignores the `$HOME` environment variable, you must either move or symlink
   the appropriate `Secret` files from the `$HOME` directory defined by Tekton (`/tekton/home`) to
-  the non-root user's valid home directory to use SSH authentication for either Git or Docker.
+  the non-root user's valid home directory to use SSH authentication for either Git or registry.
 
 For an example of configuring SSH authentication in a non-root `securityContext`,
 see [`authenticating-git-commands`](../examples/v1/taskruns/authenticating-git-commands.yaml).
@@ -338,22 +338,22 @@ to the home directory of its associated user.
 
 For example usage, see [`authenticating-git-commands`](../examples/v1/taskruns/authenticating-git-commands.yaml).
 
-## Configuring authentication for Docker
+## Configuring authentication for registry
 
-This section describes how to configure the following authentication schemes for use with Docker:
+This section describes how to configure the following authentication schemes for use with registry:
 
-- [Configuring `basic-auth` authentication for Docker](#configuring-basic-auth-authentication-for-docker)
-- [Configuring `docker*` authentication for Docker](#configuring-docker-authentication-for-docker)
+- [Configuring `basic-auth` authentication for registry](#configuring-basic-auth-authentication-for-registry)
+- [Configuring `registry*` authentication for registry](#configuring-registry-authentication-for-registry)
 
-### Configuring `basic-auth` authentication for Docker
+### Configuring `basic-auth` authentication for registry
 
-This section describes how to configure the `basic-auth` (username/password pair) type `Secret` for use with Docker.
+This section describes how to configure the `basic-auth` (username/password pair) type `Secret` for use with registry.
 
-In the example below, before executing any `Steps` in the `Run`, Tekton creates a `~/.docker/config.json` file containing
+In the example below, before executing any `Steps` in the `Run`, Tekton creates a `~/.registry/config.json` file containing
 the credentials specified in the `Secret`.
 
 1. In `secret.yaml`, define a `Secret` that specifies the username and password that you want Tekton
-   to use to access the target Docker registry:
+   to use to access the target registry registry:
 
    ```yaml
    apiVersion: v1
@@ -361,14 +361,14 @@ the credentials specified in the `Secret`.
    metadata:
      name: basic-user-pass
      annotations:
-       tekton.dev/docker-0: https://gcr.io # Described below
+       tekton.dev/registry-0: https://gcr.io # Described below
    type: kubernetes.io/basic-auth
    stringData:
      username: <cleartext username>
      password: <cleartext password>
    ```
 
-   In the above example, the value for `tekton.dev/docker-0` specifies the URL for which Tekton will use this `Secret`,
+   In the above example, the value for `tekton.dev/registry-0` specifies the URL for which Tekton will use this `Secret`,
    as described in [Understanding credential selection](#understanding-credential-selection).
 
 1. In `serviceaccount.yaml`, associate the `Secret` with the desired `ServiceAccount`:
@@ -417,22 +417,22 @@ the credentials specified in the `Secret`.
    kubectl apply --filename secret.yaml serviceaccount.yaml run.yaml
    ```
 
-## Configuring `docker*` authentication for Docker
+## Configuring `registry*` authentication for registry
 
 This section describes how to configure authentication using the `dockercfg` and `dockerconfigjson` type
-`Secrets` for use with Docker. In the example below, before executing any `Steps` in the `Run`, Tekton creates
-a `~/.docker/config.json` file containing the credentials specified in the `Secret`. When the `Steps` execute,
-Tekton uses those credentials to access the target Docker registry.
+`Secrets` for use with registry. In the example below, before executing any `Steps` in the `Run`, Tekton creates
+a `~/.registry/config.json` file containing the credentials specified in the `Secret`. When the `Steps` execute,
+Tekton uses those credentials to access the target registry registry.
 f
 **Note:** If you specify both the Tekton `basic-auth` and the above Kubernetes `Secrets`, Tekton merges all
 credentials from all specified `Secrets` but Tekton's `basic-auth` `Secret` overrides either of the
 Kubernetes `Secrets`.
 
-1. Define a `Secret` based on your Docker client configuration file.
+1. Define a `Secret` based on your registry client configuration file.
    
    ```bash
    kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
+    --from-file=.dockerconfigjson=<path/to/.registry/config.json> \
     --type=kubernetes.io/dockerconfigjson
    ```
    For more information, see [Pull an Image from a Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
@@ -541,15 +541,15 @@ Host url2.com
 ...
 ```
 
-### `basic-auth` for Docker
+### `basic-auth` for registry
 
 Given URLs, usernames, and passwords of the form: `https://url{n}.com`,
-`user{n}`, and `pass{n}`, Tekton generates the following. Since Docker doesn't
+`user{n}`, and `pass{n}`, Tekton generates the following. Since registry doesn't
 support the `kubernetes.io/ssh-auth` type `Secret`, Tekton ignores annotations
 on `Secrets` of that type.
 
 ```
-=== ~/.docker/config.json ===
+=== ~/.registry/config.json ===
 {
   "auths": {
     "https://url1.com": {
@@ -571,16 +571,16 @@ on `Secrets` of that type.
 
 This message has the following format:
 
-> `warning: unsuccessful cred copy: ".docker" from "/tekton/creds" to
+> `warning: unsuccessful cred copy: ".registry" from "/tekton/creds" to
 > "/tekton/home": unable to open destination: open
-> /tekton/home/.docker/config.json: permission denied`
+> /tekton/home/.registry/config.json: permission denied`
 
 The precise credential and paths mentioned can vary. This message is only a
 warning but can be indicative of the following problems:
 
 #### Multiple Steps with varying UIDs
 
-Multiple Steps with different users / UIDs are trying to initialize docker
+Multiple Steps with different users / UIDs are trying to initialize registry
 or git credentials in the same Task. If those Steps need access to the
 credentials then they may fail as they might not have permission to access them.
 
@@ -604,7 +604,7 @@ credential initialization](#disabling-tektons-built-in-auth).
 #### A Workspace or Volume is also Mounted for the same credentials
 
 A Task has mounted both a Workspace (or Volume) for credentials and the TaskRun
-has attached a service account with git or docker credentials that Tekton will
+has attached a service account with git or registry credentials that Tekton will
 try to initialize.
 
 The simplest solution to this problem is to not mix credentials mounted via
@@ -614,7 +614,7 @@ See [the section on disabling Tekton's credential initialization](#disabling-tek
 #### A Task employs a read-only Workspace or Volume for `$HOME`
 
 A Task has mounted a read-only Workspace (or Volume) for the user's `HOME`
-directory and the TaskRun attaches a service account with git or docker
+directory and the TaskRun attaches a service account with git or registry
 credentials that Tekton will try to initialize.
 
 The simplest solution to this problem is to not mix credentials mounted via

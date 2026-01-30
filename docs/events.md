@@ -181,7 +181,7 @@ of the event. Inside the root key, the whole `spec` and `status` of the resource
             "type": "array"
           },
           {
-            "default": "docker.io/curlimages/curl:7.72.0@sha256:3c3ff0c379abb1150bb586c7d55848ed4dcde4a6486b6f37d6815aed569332fe",
+            "default": "registry.example.com/curlimages/curl:7.72.0@sha256:3c3ff0c379abb1150bb586c7d55848ed4dcde4a6486b6f37d6815aed569332fe",
             "description": "option of curl image",
             "name": "curl-image",
             "type": "string"

@@ -91,7 +91,7 @@ Pod templates support fields listed in the table below.
 		</tr>
 		<tr>
 			<td><code>enableServiceLinks</code></td>
-			<td><b>Default:</b> <code>true</code>. Determines whether services in the Pod's namespace are exposed as environment variables to the Pod, similarly to Docker service links.</td>
+			<td><b>Default:</b> <code>true</code>. Determines whether services in the Pod's namespace are exposed as environment variables to the Pod, similarly to registry service links.</td>
 		</tr>
 		<tr>
 			<td><code>priorityClassName</code></td>

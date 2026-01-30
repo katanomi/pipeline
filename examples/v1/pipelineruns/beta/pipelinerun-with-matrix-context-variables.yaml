@@ -87,13 +87,13 @@ spec:
                 - name: IMAGE
                   value: image-1
                 - name: DIGEST
-                  value: path/to/Dockerfile1
+                  value: path/to/registryfile1
             - name: build-2
               params:
                 - name: IMAGE
                   value: image-2
                 - name: DIGEST
-                  value: path/to/Dockerfile2
+                  value: path/to/registryfile2
             - name: build-3
               params:
                 - name: IMAGE

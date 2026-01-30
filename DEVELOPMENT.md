@@ -13,7 +13,7 @@ First, you may want to [Ramp up](#ramp-up) on Kubernetes and Custom Resource Def
 1. [Building and deploying](#building-and-deploying) Tekton source code from a local clone.
     1. [Setup a Kubernetes cluster](#setup-a-kubernetes-cluster)
     1. [Configure kubectl to use your cluster](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
-    1. [Set up a docker repository 'ko' can push images to](https://github.com/knative/serving/blob/4a8c859741a4454bdd62c2b60069b7d05f5468e7/docs/setting-up-a-docker-registry.md)
+    1. [Set up a registry repository 'ko' can push images to](https://github.com/knative/serving/blob/4a8c859741a4454bdd62c2b60069b7d05f5468e7/docs/setting-up-a-registry-registry.md)
 1. [Developing and testing](#developing-and-testing) Tekton pipelines
     1. Learn how to [iterate](#iterating-on-code-changes) on code changes
     1. [Managing Tekton Objects using `ko`](#managing-tekton-objects-using-ko) in Kubernetes
@@ -110,7 +110,7 @@ To [build, deploy and run your Tekton Objects with `ko`](#install-pipeline), you
 
     If it is not set, `ko` infers the location by effectively using `go env GOROOT`.
 
-1. `KO_DOCKER_REPO`: The docker repository to which developer images should be pushed.
+1. `KO_DOCKER_REPO`: The registry repository to which developer images should be pushed.
 For example:
     - Using **Google Container Registry (GCR)**:
 
@@ -119,14 +119,14 @@ For example:
         export KO_DOCKER_REPO='gcr.io/my-gcloud-project-name'
         ```
 
-    - Using **Docker Desktop** (Docker Hub):
+    - Using **Desktop Registry** (registry hub):
 
         ```shell
-        # format: 'docker.io/${DOCKER_HUB_USERNAME}'
-        export KO_DOCKER_REPO='docker.io/my-dockerhub-username'
+        # format: 'registry.example.com/${REGISTRY_USERNAME}'
+        export KO_DOCKER_REPO='registry.example.com/my-username'
         ```
 
-    - You can also [host your own Docker Registry server](https://docs.docker.com/registry/deploying/) and reference it:
+    - You can also [host your own registry server](https://distribution.github.io/distribution/) and reference it:
 
         ```shell
         # format: ${localhost:port}/{}
@@ -189,18 +189,18 @@ Depending on your chosen container registry that you set in the `KO_DOCKER_REPO`
 
 <!-- TODO: Need instructions for MiniKube -->
 
-#### Using Docker Desktop (Docker Hub)
+#### Using registry Desktop (registry Hub)
 
-Docker Desktop provides seamless integration with both a local (default) image registry as well as Docker Hub remote registries.  To use Docker Hub registries with `ko`, all you need do is to configure Docker Desktop with your Docker ID and password in its dashboard.
+registry Desktop provides seamless integration with both a local (default) image registry as well as registry Hub remote registries.  To use registry Hub registries with `ko`, all you need do is to configure registry Desktop with your registry ID and password in its dashboard.
 
 #### Using Google Container Registry (GCR)
 If using GCR with `ko`, make sure to configure
-[authentication](https://cloud.google.com/container-registry/docs/advanced-authentication#standalone_docker_credential_helper)
+[authentication](https://cloud.google.com/container-registry/docs/advanced-authentication#standalone_registry_credential_helper)
 for your `KO_DOCKER_REPO` if required. To be able to push images to
 `gcr.io/<project>`, you need to run this once:
 
 ```shell
-gcloud auth configure-docker
+gcloud auth configure-registry
 ```
 
 To be able to pull images from `gcr.io/<project>`, please follow the instructions [here](https://cloud.google.com/container-registry/docs/access-control#grant) to configure IAM policies for the services that will pull iamges from your GCR. 
@@ -221,18 +221,18 @@ is in a different project than your GCR registry, you will need to provide the T
 controller and webhook service accounts with GCR credentials.
 See documentation on [using GCR with GKE](https://cloud.google.com/container-registry/docs/using-with-google-cloud-platform#gke)
 for more information.
-To do this, create a secret for your docker credentials and reference this secret from the controller and webhook service accounts,
+To do this, create a secret for your registry credentials and reference this secret from the controller and webhook service accounts,
 as follows.
 
 1. Create a secret, for example:
 
     ```yaml
     kubectl create secret generic ${SECRET_NAME} \
-    --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
+    --from-file=.dockerconfigjson=<path/to/.registry/config.json> \
     --type=kubernetes.io/dockerconfigjson \
     --namespace=tekton-pipelines
     ```
-   See [Configuring authentication for Docker](./docs/auth.md#configuring-authentication-for-docker)
+   See [Configuring authentication for registry](./docs/auth.md#configuring-authentication-for-registry)
    for more detailed information on creating secrets containing registry credentials.
 
 2. Update the `tekton-pipelines-controller` and `tekton-pipelines-webhook` service accounts
@@ -284,7 +284,7 @@ The recommended minimum development configuration is:
 [Kind](https://kind.sigs.k8s.io/) is a great tool for working with Kubernetes clusters locally. It is particularly useful to quickly test code against different cluster [configurations](https://kind.sigs.k8s.io/docs/user/quick-start/#advanced).
 
 1. Install [required tools](./DEVELOPMENT.md#install-tools) (note: may require a newer version of Go).
-2. Install [Docker](https://www.docker.com/get-started).
+2. Install [registry](https://www.registry.com/get-started).
 3. Create cluster:
 
    ```sh
@@ -304,9 +304,9 @@ optional: As a convenience, the [Tekton plumbing project](https://github.com/tek
 
 - Follow the instructions for [running locally with Minikube](docs/developers/local-setup.md#using-minikube)
 
-#### Using Docker Desktop
+#### Using registry Desktop
 
-- Follow the instructions for [running locally with Docker Desktop](docs/developers/local-setup.md#using-docker-desktop)
+- Follow the instructions for [running locally with registry Desktop](docs/developers/local-setup.md#using-registry-desktop)
 
 #### Using GKE
 

@@ -244,8 +244,8 @@ spec:
       taskRef:
         name: build-push
       params:
-        - name: pathToDockerFile
-          value: Dockerfile
+        - name: pathToregistryFile
+          value: registryfile
         - name: pathToContext
           value: "$(params.context)"
         - name: flags
@@ -521,8 +521,8 @@ spec:
       taskRef:
         name: build-push
       params:
-        - name: pathToDockerFile
-          value: Dockerfile
+        - name: pathToregistryFile
+          value: registryfile
         - name: pathToContext
           value: /workspace/examples/microservices/leeroy-web
 ```
@@ -592,7 +592,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog
+      value: registry.example.com/myrepo/mycatalog
     - name: name
       value: echo-task
     - name: kind
@@ -607,7 +607,7 @@ spec:
     - name: hello-world
       taskRef:
         name: echo-task
-        bundle: docker.com/myrepo/mycatalog
+        bundle: registry.com/myrepo/mycatalog
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -615,7 +615,7 @@ spec:
 Here, the `bundle` field is the full reference url to the artifact. The name is the
 `metadata.name` field of the `Task`.
 
-You may also specify a `tag` as you would with a Docker image which will give you a fixed,
+You may also specify a `tag` as you would with a registry image which will give you a fixed,
 repeatable reference to a `Task`.
 
 {{< tabs >}}
@@ -626,7 +626,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog:v1.0.1
+      value: registry.example.com/myrepo/mycatalog:v1.0.1
     - name: name
       value: echo-task
     - name: kind
@@ -641,7 +641,7 @@ spec:
     - name: hello-world
       taskRef:
         name: echo-task
-        bundle: docker.com/myrepo/mycatalog:v1.0.1
+        bundle: registry.com/myrepo/mycatalog:v1.0.1
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -656,7 +656,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog@sha256:abc123
+      value: registry.example.com/myrepo/mycatalog@sha256:abc123
     - name: name
       value: echo-task
     - name: kind
@@ -671,7 +671,7 @@ spec:
     - name: hello-world
       taskRef:
         name: echo-task
-        bundle: docker.io/myrepo/mycatalog@sha256:abc123
+        bundle: registry.example.com/myrepo/mycatalog@sha256:abc123
 ```
 {{% /tab %}}
 {{< /tabs >}}

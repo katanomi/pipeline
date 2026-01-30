@@ -426,7 +426,7 @@ in the [DEVELOPMENT.md](../DEVELOPMENT.md#environment-setup)), use
 `e2e-tests.sh` directly and provide the `--run-tests` argument:
 
 ```shell
-export KO_DOCKER_REPO=gcr.io/my_docker_repo
+export KO_DOCKER_REPO=gcr.io/my_registry_repo
 test/e2e-tests.sh --run-tests
 ```
 

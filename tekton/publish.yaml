@@ -97,7 +97,7 @@ spec:
       #!/bin/sh
       set -ex
 
-      # Setup docker-auth
+      # Setup registry auth
       DOCKER_CONFIG=~/.docker
       mkdir -p ${DOCKER_CONFIG}
       cp /workspace/docker-config.json ${DOCKER_CONFIG}/config.json
@@ -149,7 +149,7 @@ spec:
       export KO_CONFIG_PATH=/workspace
       cat ${KO_CONFIG_PATH}/.ko.yaml
 
-      # Setup docker-auth
+      # Setup registry auth
       DOCKER_CONFIG=~/.docker
       mkdir -p ${DOCKER_CONFIG}
       cp /workspace/docker-config.json ${DOCKER_CONFIG}/config.json
@@ -237,7 +237,7 @@ spec:
       #!/bin/sh
       set -ex
 
-      # Setup docker-auth
+      # Setup registry auth
       DOCKER_CONFIG=~/.docker
       mkdir -p ${DOCKER_CONFIG}
       cp /workspace/docker-config.json ${DOCKER_CONFIG}/config.json

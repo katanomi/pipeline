@@ -126,7 +126,7 @@ func TestFlagHandlingMissingFiles(t *testing.T) {
 	}
 	// No username / password files yields an error.
 
-	cfg := basicDocker{make(map[string]entry)}
+	cfg := basicRegistry{make(map[string]entry)}
 	if err := cfg.Set("not-found=https://us.gcr.io"); err == nil {
 		t.Error("Set(); got success, wanted error.")
 	}
@@ -145,7 +145,7 @@ func TestFlagHandlingURLCollision(t *testing.T) {
 		t.Fatalf("os.WriteFile(password) = %v", err)
 	}
 
-	cfg := basicDocker{make(map[string]entry)}
+	cfg := basicRegistry{make(map[string]entry)}
 	if err := cfg.Set("foo=https://us.gcr.io"); err != nil {
 		t.Fatalf("First Set() = %v", err)
 	}
@@ -155,14 +155,14 @@ func TestFlagHandlingURLCollision(t *testing.T) {
 }
 
 func TestMalformedValueTooMany(t *testing.T) {
-	cfg := basicDocker{make(map[string]entry)}
+	cfg := basicRegistry{make(map[string]entry)}
 	if err := cfg.Set("bar=baz=blah"); err == nil {
 		t.Error("Second Set(); got success, wanted error.")
 	}
 }
 
 func TestMalformedValueTooFew(t *testing.T) {
-	cfg := basicDocker{make(map[string]entry)}
+	cfg := basicRegistry{make(map[string]entry)}
 	if err := cfg.Set("bar"); err == nil {
 		t.Error("Second Set(); got success, wanted error.")
 	}
@@ -260,7 +260,7 @@ func TestMultipleFlagHandling(t *testing.T) {
 	if err := os.MkdirAll(barDir, os.ModePerm); err != nil {
 		t.Fatalf("os.MkdirAll(%s) = %v", barDir, err)
 	}
-	if err := os.WriteFile(filepath.Join(barDir, corev1.DockerConfigJsonKey), []byte(`{"auths":{"https://index.docker.io/v1":{"auth":"fooisbar"}}}`), 0777); err != nil {
+	if err := os.WriteFile(filepath.Join(barDir, corev1.DockerConfigJsonKey), []byte(`{"auths":{"https://registry.example.com/v1":{"auth":"fooisbar"}}}`), 0777); err != nil {
 		t.Fatalf("os.WriteFile(username) = %v", err)
 	}
 
@@ -312,13 +312,13 @@ func TestMultipleFlagHandling(t *testing.T) {
 	}
 
 	// Note: "auth" is base64(username + ":" + password)
-	expected := `{"auths":{"de.icr.io":{"auth":"fooisbla"},"https://index.docker.io/v1":{"auth":"fooisbar"},"https://my.registry/v1":{"auth":"fooisbaz"},"https://us.gcr.io":{"username":"bar","password":"baz","auth":"YmFyOmJheg==","email":"not@val.id"},"us.icr.io":{"auth":"fooisblubb"}}}`
+	expected := `{"auths":{"de.icr.io":{"auth":"fooisbla"},"https://my.registry/v1":{"auth":"fooisbaz"},"https://registry.example.com/v1":{"auth":"fooisbar"},"https://us.gcr.io":{"username":"bar","password":"baz","auth":"YmFyOmJheg==","email":"not@val.id"},"us.icr.io":{"auth":"fooisblubb"}}}`
 	if string(b) != expected {
 		t.Errorf("got: %v, wanted: %v", string(b), expected)
 	}
 }
 
-// TestNoAuthProvided confirms that providing zero secrets results in no docker
+// TestNoAuthProvided confirms that providing zero secrets results in no registry
 // credential file being written to disk.
 func TestNoAuthProvided(t *testing.T) {
 	credentials.VolumePath = t.TempDir()

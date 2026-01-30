@@ -50,7 +50,7 @@ var dnsLabel1123Forbidden = regexp.MustCompile("[^a-zA-Z0-9-]+")
 // and VolumeMounts to be given to each Step. Additionally, a list of
 // entrypointer arguments are returned, each with a meaning specific to
 // the credential type it describes: git credentials expect one set of
-// args while docker credentials expect another.
+// args while registry credentials expect another.
 //
 // Any errors encountered during this process are returned to the
 // caller. If no matching annotated secrets are found, nil lists with a
@@ -91,7 +91,7 @@ func credsInit(ctx context.Context, obj runtime.Object, serviceAccountName, name
 
 	// Track duplicated secrets, prevent errors like this:
 	//  Pod "xxx" is invalid: spec.containers[0].volumeMounts[12].mountPath: Invalid value:
-	//  "/tekton/creds-secrets/demo-docker-credentials": must be unique
+	//  "/tekton/creds-secrets/demo-registry-credentials": must be unique
 	visitedSecrets := make(map[string]struct{})
 	for _, secretEntry := range sa.Secrets {
 		if secretEntry.Name == "" {

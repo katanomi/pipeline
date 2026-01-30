@@ -33,7 +33,7 @@ import (
 )
 
 var (
-	defaultKoDockerRepoRE = regexp.MustCompile("gcr.io/christiewilson-catfactory")
+	defaultKoregistryRepoRE = regexp.MustCompile("gcr.io/christiewilson-catfactory")
 	imagesMappingRE       = getImagesMappingRE()
 )
 
@@ -74,7 +74,7 @@ func waitValidateV1TaskRunDone(ctx context.Context, t *testing.T, c *clients, ta
 	}
 }
 
-// substituteEnv substitutes docker repos and bucket paths from the system
+// substituteEnv substitutes registry repos and bucket paths from the system
 // environment for input to allow tests on local clusters. It unsets the
 // namespace for ServiceAccounts so that they work under test. It also
 // replaces image names to arch specific ones, based on provided mapping.
@@ -85,7 +85,7 @@ func substituteEnv(input []byte, namespace string) ([]byte, error) {
 	if !ok {
 		return nil, errors.New("KO_DOCKER_REPO is not set")
 	}
-	output := defaultKoDockerRepoRE.ReplaceAll(input, []byte(val))
+	output := defaultKoregistryRepoRE.ReplaceAll(input, []byte(val))
 
 	// Replace any "namespace: default"s with the test namespace.
 	output = defaultNamespaceRE.ReplaceAll(output, []byte("namespace: "+namespace))
@@ -271,8 +271,8 @@ func imageNamesMapping() map[string]string {
 			"registry":                              getTestImage(registryImage),
 			"node":                                  "node:alpine3.11",
 			"gcr.io/cloud-builders/git":             "alpine/git:latest",
-			"docker:dind":                           "ibmcom/docker-s390x:20.10",
-			"docker":                                "docker:18.06.3",
+			"registry:dind":                           "ibmcom/registry-s390x:20.10",
+			"registry":                                "registry:18.06.3",
 			"mikefarah/yq:3":                        "danielxlee/yq:2.4.0",
 			"stedolan/jq":                           "ibmcom/jq-s390x:latest",
 			"amd64/ubuntu":                          "s390x/ubuntu",
@@ -283,8 +283,8 @@ func imageNamesMapping() map[string]string {
 			"registry":                              getTestImage(registryImage),
 			"node":                                  "node:alpine3.11",
 			"gcr.io/cloud-builders/git":             "alpine/git:latest",
-			"docker:dind":                           "ibmcom/docker-ppc64le:19.03-dind",
-			"docker":                                "docker:18.06.3",
+			"registry:dind":                           "ibmcom/registry-ppc64le:19.03-dind",
+			"registry":                                "registry:18.06.3",
 			"mikefarah/yq:3":                        "danielxlee/yq:2.4.0",
 			"stedolan/jq":                           "ibmcom/jq-ppc64le:latest",
 			"gcr.io/kaniko-project/executor:v1.3.0": getTestImage(kanikoImage),

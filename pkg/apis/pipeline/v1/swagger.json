@@ -60,7 +60,7 @@
           "type": "string"
         },
         "enableServiceLinks": {
-          "description": "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of Docker links. Optional: Defaults to true.",
+          "description": "EnableServiceLinks indicates whether information about services should be injected into pod's environment variables, matching the syntax of container links. Optional: Defaults to true.",
           "type": "boolean"
         },
         "env": {
@@ -1446,7 +1446,7 @@
           "x-kubernetes-list-type": "atomic"
         },
         "image": {
-          "description": "Docker image name. More info: https://kubernetes.io/docs/concepts/containers/images",
+          "description": "Image name. More info: https://kubernetes.io/docs/concepts/containers/images",
           "type": "string"
         },
         "imagePullPolicy": {

@@ -168,7 +168,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog:v1.0
+      value: registry.example.com/myrepo/mycatalog:v1.0
     - name: name
       value: mypipeline
     - name: kind
@@ -181,7 +181,7 @@ spec:
  spec:
    pipelineRef:
      name: mypipeline
-     bundle: docker.io/myrepo/mycatalog:v1.0
+     bundle: registry.example.com/myrepo/mycatalog:v1.0
  ```
 {{% /tab %}}
 {{< /tabs >}}

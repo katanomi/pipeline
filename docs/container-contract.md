@@ -33,22 +33,22 @@ value in the service account definition used by the `Task`.
 The Pipelines controller uses this value unless the service account is not 
 defined, at which point it assumes the value of `default`.
 
-The final fallback occurs to the Docker config specified in the `$HOME/.docker/config.json` file.
+The final fallback occurs to the registry config specified in the `$HOME/.registry/config.json` file.
 If no credentials are specified in any of the locations described above, the Pipelines
 controller performs an anonymous lookup of the image.
 
 For example, consider the following `Task`, which uses two images named
-`gcr.io/cloud-builders/gcloud` and `gcr.io/cloud-builders/docker`. In this example, the
+`gcr.io/cloud-builders/gcloud` and `gcr.io/cloud-builders/registry`. In this example, the
 Pipelines controller retrieves the `entrypoint` value from the registry, which allows
-the `Task` to execute the `gcloud` and `docker` commands, respectively.
+the `Task` to execute the `gcloud` and `registry` commands, respectively.
 
 ```yaml
 spec:
   steps:
     - image: gcr.io/cloud-builders/gcloud
       command: [gcloud]
-    - image: gcr.io/cloud-builders/docker
-      command: [docker]
+    - image: gcr.io/cloud-builders/registry
+      command: [registry]
 ```
 
 However, if you specify a custom `command` value, the controller uses that value instead:

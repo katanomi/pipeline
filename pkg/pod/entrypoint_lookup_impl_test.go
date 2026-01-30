@@ -61,7 +61,7 @@ func newfakeHTTP() fakeHTTP {
 
 func (f *fakeHTTP) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Request authentication for ping request.
-	// For further reference see https://docs.docker.com/registry/spec/api/#api-version-check.
+	// For further reference see https://distribution.github.io/distribution/spec/api/.
 	if r.URL.Path == "/v2/" && r.Method == http.MethodGet {
 		w.Header().Add("WWW-Authenticate", "basic")
 		w.WriteHeader(http.StatusUnauthorized)

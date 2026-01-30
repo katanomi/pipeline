@@ -36,7 +36,7 @@ weight: 201
     - [Substituting `Volume` names and types](#substituting-volume-names-and-types)
     - [Substituting in `Script` blocks](#substituting-in-script-blocks)
 - [Code examples](#code-examples)
-  - [Building and pushing a Docker image](#building-and-pushing-a-docker-image)
+  - [Building and pushing a registry image](#building-and-pushing-a-registry-image)
     - [Mounting multiple `Volumes`](#mounting-multiple-volumes)
     - [Mounting a `ConfigMap` as a `Volume` source](#mounting-a-configmap-as-a-volume-source)
     - [Using a `Secret` as an environment source](#using-a-secret-as-an-environment-source)
@@ -95,10 +95,10 @@ metadata:
   name: example-task-name
 spec:
   params:
-    - name: pathToDockerFile
+    - name: pathToregistryFile
       type: string
-      description: The path to the dockerfile to build
-      default: /workspace/workspace/Dockerfile
+      description: The path to the registryfile to build
+      default: /workspace/workspace/registryfile
     - name: builtImageUrl
       type: string
       description: location to push the built image to
@@ -108,13 +108,13 @@ spec:
       args: ["ubuntu-build-example", "SECRETS-example.md"]
     - image: gcr.io/example-builders/build-example
       command: ["echo"]
-      args: ["$(params.pathToDockerFile)"]
-    - name: dockerfile-pushexample
+      args: ["$(params.pathToregistryFile)"]
+    - name: registryfile-pushexample
       image: gcr.io/example-builders/push-example
       args: ["push", "$(params.builtImageUrl)"]
       volumeMounts:
-        - name: docker-socket-example
-          mountPath: /var/run/docker.sock
+        - name: registry-socket-example
+          mountPath: /var/run/registry.sock
   volumes:
     - name: example-volume
       emptyDir: {}
@@ -394,7 +394,7 @@ To ignore a step error, set `onError` to `continue`:
 
 ```yaml
 steps:
-  - image: docker.io/library/golang:latest
+  - image: registry.example.com/library/golang:latest
     name: ignore-unit-test-failure
     onError: continue
     script: |
@@ -1049,8 +1049,8 @@ For example, you can use `Volumes` to do the following:
 - Create an `emptyDir` persistent `Volume` that caches data across multiple `Steps`.
 - Mount a [Kubernetes `ConfigMap`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
   as `Volume` source.
-- Mount a host's Docker socket to use a `Dockerfile` for building container images.
-  **Note:** Building a container image on-cluster using `docker build` is **very
+- Mount a host's registry socket to use a `registryfile` for building container images.
+  **Note:** Building a container image on-cluster using `registry build` is **very
   unsafe** and is mentioned only for the sake of the example. Use [kaniko](https://github.com/GoogleContainerTools/kaniko) instead.
 
 ### Specifying a `Step` template
@@ -1103,35 +1103,35 @@ data:
 
 The `sidecars` field specifies a list of [`Containers`](https://kubernetes.io/docs/concepts/containers/)
 to run alongside the `Steps` in your `Task`. You can use `Sidecars` to provide auxiliary functionality, such as
-[Docker in Docker](https://hub.docker.com/_/docker) or running a mock API server that your app can hit during testing.
+[registry in registry](https://hub.registry.com/_/registry) or running a mock API server that your app can hit during testing.
 `Sidecars` spin up before your `Task` executes and are deleted after the `Task` execution completes.
 For further information, see [`Sidecars` in `TaskRuns`](taskruns.md#specifying-sidecars).
 
-In the example below, a `Step` uses a Docker-in-Docker `Sidecar` to build a Docker image:
+In the example below, a `Step` uses a registry-in-registry `Sidecar` to build a registry image:
 
 ```yaml
 steps:
-  - image: docker
+  - image: registry
     name: client
     script: |
       #!/usr/bin/env bash
-      cat > Dockerfile << EOF
+      cat > registryfile << EOF
       FROM ubuntu
       RUN apt-get update
       ENTRYPOINT ["echo", "hello"]
       EOF
-      docker build -t hello . && docker run hello
-      docker images
+      registry build -t hello . && registry run hello
+      registry images
     volumeMounts:
       - mountPath: /var/run/
         name: dind-socket
 sidecars:
-  - image: docker:18.05-dind
+  - image: registry:18.05-dind
     name: server
     securityContext:
       privileged: true
     volumeMounts:
-      - mountPath: /var/lib/docker
+      - mountPath: /var/lib/registry
         name: dind-storage
       - mountPath: /var/run/
         name: dind-socket
@@ -1332,7 +1332,7 @@ content to a file.
 
 Study the following code examples to better understand how to configure your `Tasks`:
 
-- [Building and pushing a Docker image](#building-and-pushing-a-docker-image)
+- [Building and pushing a registry image](#building-and-pushing-a-registry-image)
 - [Mounting multiple `Volumes`](#mounting-multiple-volumes)
 - [Mounting a `ConfigMap` as a `Volume` source](#mounting-a-configmap-as-a-volume-source)
 - [Using a `Secret` as an environment source](#using-a-secret-as-an-environment-source)
@@ -1342,29 +1342,29 @@ _Tip: See the collection of Tasks in the
 [Tekton community catalog](https://github.com/tektoncd/catalog) for
 more examples.
 
-### Building and pushing a Docker image
+### Building and pushing a registry image
 
-The following example `Task` builds and pushes a `Dockerfile`-built image.
+The following example `Task` builds and pushes a `registryfile`-built image.
 
-**Note:** Building a container image using `docker build` on-cluster is **very
+**Note:** Building a container image using `registry build` on-cluster is **very
 unsafe** and is shown here only as a demonstration. Use [kaniko](https://github.com/GoogleContainerTools/kaniko) instead.
 
 ```yaml
 spec:
   params:
     # This may be overridden, but is a sensible default.
-    - name: dockerfileName
+    - name: registryfileName
       type: string
-      description: The name of the Dockerfile
-      default: Dockerfile
+      description: The name of the registryfile
+      default: registryfile
     - name: image
       type: string
       description: The image to build and push
   workspaces:
   - name: source
   steps:
-    - name: dockerfile-build
-      image: gcr.io/cloud-builders/docker
+    - name: registryfile-build
+      image: gcr.io/cloud-builders/registry
       workingDir: "$(workspaces.source.path)"
       args:
         [
@@ -1373,25 +1373,25 @@ spec:
           "--tag",
           "$(params.image)",
           "--file",
-          "$(params.dockerfileName)",
+          "$(params.registryfileName)",
           ".",
         ]
       volumeMounts:
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
+        - name: registry-socket
+          mountPath: /var/run/registry.sock
 
-    - name: dockerfile-push
-      image: gcr.io/cloud-builders/docker
+    - name: registryfile-push
+      image: gcr.io/cloud-builders/registry
       args: ["push", "$(params.image)"]
       volumeMounts:
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
+        - name: registry-socket
+          mountPath: /var/run/registry.sock
 
   # As an implementation detail, this Task mounts the host's daemon socket.
   volumes:
-    - name: docker-socket
+    - name: registry-socket
       hostPath:
-        path: /var/run/docker.sock
+        path: /var/run/registry.sock
         type: Socket
 ```
 
@@ -1561,7 +1561,7 @@ log into the `Pod` and add a `Step` that pauses the `Task` at the desired stage.
 
 ```yaml
 - name: pause
-  image: docker
+  image: registry
   args: ["sleep", "6000"]
 ```
 

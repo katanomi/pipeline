@@ -7,7 +7,7 @@ spec:
     steps:
     - name: git
       image: gcr.io/cloud-builders/git
-      workingDir: /path/to/git/rules_docker
+      workingDir: /path/to/git/rules_registry
       args: ["status"]
       volumeMounts:
       - name: source
@@ -17,5 +17,5 @@ spec:
     - name: source
       gitRepo:  # https://kubernetes.io/docs/concepts/storage/volumes/#gitrepo
         # gitRepo is deprecated.
-        repository: "https://github.com/bazelbuild/rules_docker.git"
+        repository: "https://github.com/bazelbuild/rules_registry.git"
         revision: "3caddbe7f75fde6afb2e2c63654b5bbeeeedf2ac"

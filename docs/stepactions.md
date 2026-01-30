@@ -198,7 +198,7 @@ spec:
       description: "url of git repo"
       value: $(steps.git-clone.results.url)
     - name: registry-url
-      description: "url of docker registry"
+      description: "url of registry registry"
       value: $(steps.kaniko.results.url)
   steps:
     - name: git-clone
@@ -224,7 +224,7 @@ spec:
       description: "url of git repo"
       value: $(steps.git-clone.results.url)
     - name: registry-url
-      description: "url of docker registry"
+      description: "url of registry registry"
       value: $(steps.kaniko.results.url)
     - name: digest
       description: "digest of the image"
@@ -408,7 +408,7 @@ status:
   startTime: "2023-10-24T20:28:32Z"
   steps:
   - container: step-action-runner
-    imageID: docker.io/library/alpine@sha256:eece025e432126ce23f223450a0326fbebde39cdf496a85d8c016293fc851978
+    imageID: registry.example.com/library/alpine@sha256:eece025e432126ce23f223450a0326fbebde39cdf496a85d8c016293fc851978
     name: action-runner
     terminated:
       containerID: containerd://46a836588967202c05b594696077b147a0eb0621976534765478925bb7ce57f6

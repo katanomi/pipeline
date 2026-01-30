@@ -527,7 +527,7 @@ func publishImg(ctx context.Context, t *testing.T, c *clients, namespace string,
 				Image:      "gcr.io/tekton-releases/dogfooding/skopeo:latest",
 				WorkingDir: "/var",
 				Command:    []string{"/bin/sh", "-c"},
-				Args:       []string{"skopeo copy --dest-tls-verify=false oci:image docker://" + ref.String()},
+				Args:       []string{"skopeo copy --dest-tls-verify=false oci:image registry://" + ref.String()},
 				VolumeMounts: []corev1.VolumeMount{{
 					Name:      "scratch",
 					MountPath: "/var/image",

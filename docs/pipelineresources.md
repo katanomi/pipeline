@@ -32,9 +32,9 @@ spec:
       - name: workspace
         type: git
     params:
-      - name: pathToDockerFile
-        description: The path to the dockerfile to build
-        default: /workspace/workspace/Dockerfile
+      - name: pathToregistryFile
+        description: The path to the registryfile to build
+        default: /workspace/workspace/registryfile
       - name: pathToContext
         description: The build context used by Kaniko
         default: /workspace/workspace
@@ -46,10 +46,10 @@ spec:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v0.17.1
       env:
-        - name: "DOCKER_CONFIG"
-          value: "/tekton/home/.docker/"
+        - name: "registry_CONFIG"
+          value: "/tekton/home/.registry/"
       args:
-        - --dockerfile=$(inputs.params.pathToDockerFile)
+        - --registryfile=$(inputs.params.pathToregistryFile)
         - --destination=$(outputs.resources.builtImage.url)
         - --context=$(inputs.params.pathToContext)
         - --oci-layout-path=$(inputs.resources.builtImage.path)
@@ -73,7 +73,7 @@ spec:
     - name: git-revision
     - name: image-name
     - name: path-to-image-context
-    - name: path-to-dockerfile
+    - name: path-to-registryfile
   workspaces:
     - name: git-source
   tasks:
@@ -96,8 +96,8 @@ spec:
           value: $(params.image-name)
         - name: CONTEXT
           value: $(params.path-to-image-context)
-        - name: DOCKERFILE
-          value: $(params.path-to-dockerfile)
+        - name: registryFILE
+          value: $(params.path-to-registryfile)
       workspaces:
         - name: source
           workspace: git-source

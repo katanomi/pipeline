@@ -597,7 +597,7 @@ func TestPipelineTask_ValidateRegularTask_Success(t *testing.T) {
 		name: "pipeline task - use of bundle with the feature flag set",
 		tasks: PipelineTask{
 			Name:    "foo",
-			TaskRef: &TaskRef{Name: "bar", Bundle: "docker.io/foo"},
+			TaskRef: &TaskRef{Name: "bar", Bundle: "registry.example.com/foo"},
 		},
 		configMap: map[string]string{"enable-tekton-oci-bundles": "true"},
 	}}
@@ -651,7 +651,7 @@ func TestPipelineTask_ValidateRegularTask_Failure(t *testing.T) {
 		name: "pipeline task - use of bundle without the feature flag set",
 		task: PipelineTask{
 			Name:    "foo",
-			TaskRef: &TaskRef{Name: "bar", Bundle: "docker.io/foo"},
+			TaskRef: &TaskRef{Name: "bar", Bundle: "registry.example.com/foo"},
 		},
 		expectedError: *apis.ErrGeneric("bundle requires \"enable-tekton-oci-bundles\" feature gate to be true but it is false"),
 	}, {

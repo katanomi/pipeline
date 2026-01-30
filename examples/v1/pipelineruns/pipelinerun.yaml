@@ -115,15 +115,15 @@ metadata:
     tekton.dev/platforms: "linux/amd64,linux/arm64,linux/ppc64le"
 spec:
   description: >-
-    This Task builds a simple Dockerfile with kaniko and pushes to a registry.
+    This Task builds a simple registryfile with kaniko and pushes to a registry.
     This Task stores the image name and digest as results, allowing Tekton Chains to pick up
     that an image was built & sign it.
   params:
     - name: IMAGE
       description: Name (reference) of the image to build.
-    - name: DOCKERFILE
-      description: Path to the Dockerfile to build.
-      default: ./Dockerfile
+    - name: registryFILE
+      description: Path to the registryfile to build.
+      default: ./registryfile
     - name: CONTEXT
       description: The build context used by Kaniko.
       default: ./
@@ -135,11 +135,11 @@ spec:
       default: gcr.io/kaniko-project/executor:v1.8.1
   workspaces:
     - name: source
-      description: Holds the context and Dockerfile
-    - name: dockerconfig
-      description: Includes a docker `config.json`
+      description: Holds the context and registryfile
+    - name: registryconfig
+      description: Includes a registry `config.json`
       optional: true
-      mountPath: /kaniko/.docker
+      mountPath: /kaniko/.registry
   results:
     - name: IMAGE_DIGEST
       description: Digest of the image just built.
@@ -151,7 +151,7 @@ spec:
       image: $(params.BUILDER_IMAGE)
       args:
         - $(params.EXTRA_ARGS)
-        - --dockerfile=$(params.DOCKERFILE)
+        - --registryfile=$(params.registryFILE)
         - --context=$(workspaces.source.path)/$(params.CONTEXT)  # The user does not need to care the workspace and the source.
         - --destination=$(params.IMAGE)
         - --digest-file=$(results.IMAGE_DIGEST.path)
@@ -161,7 +161,7 @@ spec:
       securityContext:
         runAsUser: 0
     - name: write-url
-      image: docker.io/library/bash:5.1.4@sha256:c523c636b722339f41b6a431b44588ab2f762c5de5ec3bd7964420ff982fb1d9
+      image: registry.example.com/library/bash:5.1.4@sha256:c523c636b722339f41b6a431b44588ab2f762c5de5ec3bd7964420ff982fb1d9
       script: |
         set -e
         image="$(params.IMAGE)"
@@ -200,8 +200,8 @@ spec:
       value: $(params.image-registry)/getting-started
     - name: CONTEXT
       value: examples/getting-started
-    - name: DOCKERFILE
-      value: $(workspaces.source.path)/examples/getting-started/Dockerfile
+    - name: registryFILE
+      value: $(workspaces.source.path)/examples/getting-started/registryfile
     workspaces:
     - name: source
       workspace: git-source

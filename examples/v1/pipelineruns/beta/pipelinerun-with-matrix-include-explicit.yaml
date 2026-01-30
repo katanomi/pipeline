@@ -4,16 +4,16 @@ metadata:
   name: mytask
   annotations:
     description: |
-      A task that echoes image and dockerfile
+      A task that echoes image and registryfile
 spec:
   params:
     - name: IMAGE
-    - name: DOCKERFILE
+    - name: registryFILE
   steps:
     - name: echo
       image: alpine
       script: |
-        echo "$(params.IMAGE) and $(params.DOCKERFILE)"
+        echo "$(params.IMAGE) and $(params.registryFILE)"
 ---
 apiVersion: tekton.dev/v1
 kind: PipelineRun
@@ -31,19 +31,19 @@ spec:
               params:
                 - name: IMAGE
                   value: image-1
-                - name: DOCKERFILE
-                  value: path/to/Dockerfile1
+                - name: registryFILE
+                  value: path/to/registryfile1
             - name: build-2
               params:
                 - name: IMAGE
                   value: image-2
-                - name: DOCKERFILE
-                  value: path/to/Dockerfile2
+                - name: registryFILE
+                  value: path/to/registryfile2
             - name: build-3
               params:
                 - name: IMAGE
                   value: image-3
-                - name: DOCKERFILE
-                  value: path/to/Dockerfile3
+                - name: registryFILE
+                  value: path/to/registryfile3
         taskRef:
           name: mytask

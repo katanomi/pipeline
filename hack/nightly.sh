@@ -20,5 +20,17 @@ set -o pipefail
 
 export KO_DOCKER_REPO="gcr.io/tekton-nightly"
 # Build the base image for git images.
-docker build -t "${KO_DOCKER_REPO}/github.com/tektoncd/pipeline/base" -f images/Dockerfile images/
-docker push "${KO_DOCKER_REPO}/github.com/tektoncd/pipeline/base"
+CONTAINER_ENGINE="${CONTAINER_ENGINE:-}"
+if [[ -z "${CONTAINER_ENGINE}" ]]; then
+  if command -v podman >/dev/null 2>&1; then
+    CONTAINER_ENGINE=podman
+  elif command -v docker >/dev/null 2>&1; then
+    CONTAINER_ENGINE=docker
+  else
+    echo "container engine not found (podman/docker)" >&2
+    exit 1
+  fi
+fi
+
+${CONTAINER_ENGINE} build -t "${KO_DOCKER_REPO}/github.com/tektoncd/pipeline/base" -f images/Dockerfile images/
+${CONTAINER_ENGINE} push "${KO_DOCKER_REPO}/github.com/tektoncd/pipeline/base"

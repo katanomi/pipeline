@@ -94,13 +94,13 @@ func TestTaskRef_Invalid(t *testing.T) {
 		name: "use of bundle without the feature flag set",
 		taskRef: &v1beta1.TaskRef{
 			Name:   "my-task",
-			Bundle: "docker.io/foo",
+			Bundle: "registry.example.com/foo",
 		},
 		wantErr: apis.ErrGeneric("bundle requires \"enable-tekton-oci-bundles\" feature gate to be true but it is false"),
 	}, {
 		name: "bundle missing name",
 		taskRef: &v1beta1.TaskRef{
-			Bundle: "docker.io/foo",
+			Bundle: "registry.example.com/foo",
 		},
 		wantErr: apis.ErrMissingField("name"),
 		wc:      enableTektonOCIBundles(t),

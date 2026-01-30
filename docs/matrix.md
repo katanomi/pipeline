@@ -127,20 +127,20 @@ The `Matrix.Include` can also be used without `Matrix.Params` to generate explic
             params:
               - name: IMAGE
                 value: "image-1"
-              - name: DOCKERFILE
-                value: "path/to/Dockerfile1"
+              - name: registryFILE
+                value: "path/to/registryfile1"
           - name: build-2
             params:
               - name: IMAGE
                 value: "image-2"
-              - name: DOCKERFILE
-                value: "path/to/Dockerfile2"
+              - name: registryFILE
+                value: "path/to/registryfile2"
           - name: build-3
             params:
               - name: IMAGE
                 value: "image-3"
-              - name: DOCKERFILE
-                value: "path/to/Dockerfile3"
+              - name: registryFILE
+                value: "path/to/registryfile3"
   ...
 ```
 
@@ -150,9 +150,9 @@ This configuration allows users to take advantage of `Matrix` to fan out without
 Combinations generated
 
 ```json!
-{ "IMAGE": "image-1", "DOCKERFILE": "path/to/Dockerfile1" }
-{ "IMAGE": "image-2", "DOCKERFILE": "path/to/Dockerfile2"}
-{ "IMAGE": "image-3", "DOCKERFILE": "path/to/Dockerfile3}
+{ "IMAGE": "image-1", "registryFILE": "path/to/registryfile1" }
+{ "IMAGE": "image-2", "registryFILE": "path/to/registryfile2"}
+{ "IMAGE": "image-3", "registryFILE": "path/to/registryfile3}
 ```
 
 ## Concurrency Control

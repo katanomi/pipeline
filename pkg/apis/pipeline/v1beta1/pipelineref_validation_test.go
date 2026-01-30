@@ -41,13 +41,13 @@ func TestPipelineRef_Invalid(t *testing.T) {
 		name: "use of bundle without the feature flag set",
 		ref: &v1beta1.PipelineRef{
 			Name:   "my-pipeline",
-			Bundle: "docker.io/foo",
+			Bundle: "registry.example.com/foo",
 		},
 		wantErr: apis.ErrGeneric("bundle requires \"enable-tekton-oci-bundles\" feature gate to be true but it is false"),
 	}, {
 		name: "bundle missing name",
 		ref: &v1beta1.PipelineRef{
-			Bundle: "docker.io/foo",
+			Bundle: "registry.example.com/foo",
 		},
 		wantErr:     apis.ErrMissingField("name"),
 		withContext: enableTektonOCIBundles(t),

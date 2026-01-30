@@ -30,7 +30,7 @@ spec:
         value: "0.2"
   params:
     - name: BUILDER_IMAGE
-      value: docker.io/cnbs/sample-builder:bionic@sha256:6c03dd604503b59820fd15adbc65c0a077a47e31d404a3dcad190f3179e920b5
+      value: registry.example.com/cnbs/sample-builder:bionic@sha256:6c03dd604503b59820fd15adbc65c0a077a47e31d404a3dcad190f3179e920b5
     - name: TRUST_BUILDER
       value: "false"
     - name: APP_IMAGE

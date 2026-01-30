@@ -516,10 +516,10 @@ The following checks were performed on each of these signatures:
 {
   "Critical": {
     "Identity": {
-      "docker-reference": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller"
+      "registry-reference": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller"
     },
     "Image": {
-      "Docker-manifest-digest": "sha256:0c320bc09e91e22ce7f01e47c9f3cb3449749a5f72d5eaecb96e710d999c28e8"
+      "registry-manifest-digest": "sha256:0c320bc09e91e22ce7f01e47c9f3cb3449749a5f72d5eaecb96e710d999c28e8"
     },
     "Type": "Tekton container signature"
   },
@@ -527,7 +527,7 @@ The following checks were performed on each of these signatures:
 }
 ```
 
-The verification shows a list of checks performed and returns the digest in `Critical.Image.Docker-manifest-digest`
+The verification shows a list of checks performed and returns the digest in `Critical.Image.registry-manifest-digest`
 which can be used to retrieve the provenance from the transparency logs for that image using `rekor-cli`.
 
 ### Verify the transparency logs using `rekor-cli`
@@ -539,7 +539,7 @@ go install -v github.com/sigstore/rekor/cmd/rekor-cli@latest
 ```
 
 Now, use the digest collected from the previous [section](#verify-signatures-using-cosign) in
-`Critical.Image.Docker-manifest-digest`, for example,
+`Critical.Image.registry-manifest-digest`, for example,
 `sha256:0c320bc09e91e22ce7f01e47c9f3cb3449749a5f72d5eaecb96e710d999c28e8`.
 
 Search the transparency log with the digest just collected:

@@ -31,31 +31,34 @@ import (
 
 const annotationPrefix = "tekton.dev/docker-"
 
-var config basicDocker
-var dockerConfig arrayArg
-var dockerCfg arrayArg
+var config basicRegistry
+var registryConfig arrayArg
+var legacyCfgArgs arrayArg
 
-// AddFlags adds CLI flags that dockercreds supports to a given flag.FlagSet.
+// AddFlags adds CLI flags supported by the registry credential helper.
 func AddFlags(flagSet *flag.FlagSet) {
 	flags(flagSet)
 }
 
 func flags(fs *flag.FlagSet) {
-	config = basicDocker{make(map[string]entry)}
-	dockerConfig = arrayArg{[]string{}}
-	dockerCfg = arrayArg{[]string{}}
+	config = basicRegistry{make(map[string]entry)}
+	registryConfig = arrayArg{[]string{}}
+	legacyCfgArgs = arrayArg{[]string{}}
 	fs.Var(&config, "basic-docker", "List of secret=url pairs.")
-	fs.Var(&dockerConfig, "docker-config", "Docker config.json secret file.")
-	fs.Var(&dockerCfg, "docker-cfg", "Docker .dockercfg secret file.")
+	fs.Var(&config, "basic-registry", "List of secret=url pairs.")
+	fs.Var(&registryConfig, "docker-config", "Registry config.json secret file.")
+	fs.Var(&registryConfig, "registry-config", "Registry config.json secret file.")
+	fs.Var(&legacyCfgArgs, "docker-cfg", ".dockercfg secret file.")
+	fs.Var(&legacyCfgArgs, "registry-cfg", ".dockercfg secret file.")
 }
 
 // As the flag is read, this status is populated.
-// basicDocker implements flag.Value
-type basicDocker struct {
+// basicRegistry implements flag.Value
+type basicRegistry struct {
 	Entries map[string]entry `json:"auths"`
 }
 
-func (dc *basicDocker) String() string {
+func (dc *basicRegistry) String() string {
 	if dc == nil {
 		// According to flag.Value this can happen.
 		return ""
@@ -68,7 +71,7 @@ func (dc *basicDocker) String() string {
 }
 
 // Set sets a secret for a URL from a value in the format of "secret=url"
-func (dc *basicDocker) Set(value string) error {
+func (dc *basicRegistry) Set(value string) error {
 	parts := strings.Split(value, "=")
 	if len(parts) != 2 {
 		return fmt.Errorf("expect entries of the form secret=url, got: %v", value)
@@ -134,15 +137,15 @@ func newEntry(secret string) (*entry, error) {
 	}, nil
 }
 
-type basicDockerBuilder struct{}
+type basicRegistryBuilder struct{}
 
-// NewBuilder returns a new builder for Docker credentials.
-func NewBuilder() credentials.Builder { return &basicDockerBuilder{} }
+// NewBuilder returns a new builder for registry credentials.
+func NewBuilder() credentials.Builder { return &basicRegistryBuilder{} }
 
 // MatchingAnnotations extracts flags for the credential helper
 // from the supplied secret and returns a slice (of length 0 or
 // greater) of applicable domains.
-func (*basicDockerBuilder) MatchingAnnotations(secret *corev1.Secret) []string {
+func (*basicRegistryBuilder) MatchingAnnotations(secret *corev1.Secret) []string {
 	var flags []string
 	switch secret.Type {
 	case corev1.SecretTypeBasicAuth:
@@ -164,32 +167,32 @@ func (*basicDockerBuilder) MatchingAnnotations(secret *corev1.Secret) []string {
 	return flags
 }
 
-// Write builds a .docker/config.json file from a combination
-// of kubernetes docker registry secrets and tekton docker
+// Write builds a registry config file (config.json under the config dir) from a combination
+// of kubernetes registry secrets and tekton registry
 // secret entries and writes it to the given directory. If
 // no entries exist then nothing will be written to disk.
-func (*basicDockerBuilder) Write(directory string) error {
-	dockerDir := filepath.Join(directory, ".docker")
-	basicDocker := filepath.Join(dockerDir, "config.json")
+func (*basicRegistryBuilder) Write(directory string) error {
+	registryConfigDir := filepath.Join(directory, ".docker")
+	registryConfigFile := filepath.Join(registryConfigDir, "config.json")
 	cf := configFile{Auth: config.Entries}
 	auth := map[string]entry{}
 
-	for _, secretName := range dockerCfg.Values {
-		dockerConfigAuthMap, err := authsFromDockerCfg(secretName)
+	for _, secretName := range legacyCfgArgs.Values {
+		registryCfgAuthMap, err := authsFromDockerCfg(secretName)
 		if err != nil {
 			return err
 		}
-		for k, v := range dockerConfigAuthMap {
+		for k, v := range registryCfgAuthMap {
 			auth[k] = v
 		}
 	}
 
-	for _, secretName := range dockerConfig.Values {
-		dockerConfigAuthMap, err := authsFromDockerConfig(secretName)
+	for _, secretName := range registryConfig.Values {
+		registryConfigAuthMap, err := authsFromRegistryConfig(secretName)
 		if err != nil {
 			return err
 		}
-		for k, v := range dockerConfigAuthMap {
+		for k, v := range registryConfigAuthMap {
 			auth[k] = v
 		}
 	}
@@ -199,7 +202,7 @@ func (*basicDockerBuilder) Write(directory string) error {
 	if len(auth) == 0 {
 		return nil
 	}
-	if err := os.MkdirAll(dockerDir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(registryConfigDir, os.ModePerm); err != nil {
 		return err
 	}
 
@@ -208,7 +211,7 @@ func (*basicDockerBuilder) Write(directory string) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(basicDocker, content, 0600)
+	return os.WriteFile(registryConfigFile, content, 0600)
 }
 
 func authsFromDockerCfg(secret string) (map[string]entry, error) {
@@ -222,7 +225,7 @@ func authsFromDockerCfg(secret string) (map[string]entry, error) {
 	return m, err
 }
 
-func authsFromDockerConfig(secret string) (map[string]entry, error) {
+func authsFromRegistryConfig(secret string) (map[string]entry, error) {
 	secretPath := credentials.VolumeName(secret)
 	m := make(map[string]entry)
 	c := configFile{}

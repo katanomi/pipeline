@@ -2,30 +2,30 @@
 
 This section provides guidelines for running Tekton on your local workstation via the following methods:
 
-- [Docker for Desktop](#using-docker-desktop)
+- [registry for Desktop](#using-registry-desktop)
 - [Minikube](#using-minikube)
 
-## Using Docker Desktop
+## Using registry Desktop
 
 ### Prerequisites
 
-Complete these prerequisites to run Tekton locally using Docker Desktop:
+Complete these prerequisites to run Tekton locally using registry Desktop:
 
 - Install the [required tools](https://github.com/tektoncd/pipeline/blob/main/DEVELOPMENT.md#requirements).
-- Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
-- Configure Docker Desktop ([Mac](https://docs.docker.com/docker-for-mac/#resources), [Windows](https://docs.docker.com/docker-for-windows/#resources))to use six CPUs, 10 GB of RAM and 2GB of swap space.
-- Set `host.docker.internal:5000` as an insecure registry with Docker for Desktop. See the [Docker insecure registry documentation](https://docs.docker.com/registry/insecure/).
+- Install [registry Desktop](https://www.registry.com/products/registry-desktop)
+- Configure registry Desktop ([Mac](https://docs.registry.com/registry-for-mac/#resources), [Windows](https://docs.registry.com/registry-for-windows/#resources))to use six CPUs, 10 GB of RAM and 2GB of swap space.
+- Set `host.registry.internal:5000` as an insecure registry with registry for Desktop. See the [registry insecure registry documentation](https://docs.registry.com/registry/insecure/).
   for details.
 - Pass `--insecure` as an argument to your Kaniko tasks so that you can push to an insecure registry.
-- Run a local (insecure) Docker registry as follows:
+- Run a local (insecure) registry registry as follows:
 
-  `docker run -d -p 5000:5000 --name registry-srv -e REGISTRY_STORAGE_DELETE_ENABLED=true registry:2`
+  `registry run -d -p 5000:5000 --name registry-srv -e REGISTRY_STORAGE_DELETE_ENABLED=true registry:2`
 
-- (Optional) Install a Docker registry viewer to verify the images have been pushed:
+- (Optional) Install a registry registry viewer to verify the images have been pushed:
 
-`docker run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web`
+`registry run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 hyper/registry-registry-web`
 
-- Verify that you can push to `host.docker.internal:5000/myregistry/<image_name>`.
+- Verify that you can push to `host.registry.internal:5000/myregistry/<image_name>`.
 
 ### Reconfigure logging
 
@@ -46,21 +46,21 @@ Complete these prerequisites to run Tekton locally using Minikube:
 ```bash
 minikube start --memory 6144 --cpus 2
 ```
-- Point your shell to minikube's docker-daemon by running `eval $(minikube -p minikube docker-env)`
+- Point your shell to minikube's registry-daemon by running `eval $(minikube -p minikube registry-env)`
 - Set up a [registry on minikube](https://github.com/kubernetes/minikube/tree/master/deploy/addons/registry-aliases) by running `minikube addons enable registry` and `minikube addons enable registry-aliases`
 
 ### Reconfigure logging
 
-See the information in the "Docker for Desktop" section
+See the information in the "registry for Desktop" section
 
-## Using kind and local docker registry
+## Using kind and local registry registry
 
 ### Prerequisites
 
 Complete these prerequisites to run Tekton locally using Kind:
 
 - Install the [required tools](https://github.com/tektoncd/pipeline/blob/main/DEVELOPMENT.md#requirements).
-- Install [Docker](https://www.docker.com/get-started).
+- Install [registry](https://www.registry.com/get-started).
 - Install [kind](https://kind.sigs.k8s.io/).
 
 ### Use local registry without authentication
@@ -77,7 +77,7 @@ export TEST_PASS=testpassword
 if [ ! -f auth ]; then
     mkdir auth
 fi
-docker run \
+registry run \
  --entrypoint htpasswd \
  httpd:2 -Bbn $TEST_USER $TEST_PASS > auth/htpasswd
 ```
@@ -94,9 +94,9 @@ set -o errexit
 # create registry container unless it already exists
 reg_name='kind-registry'
 reg_port='5000'
-running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
+running="$(registry inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
 if [ "${running}" != 'true' ]; then
- docker run \
+ registry run \
    -d --restart=always -p "127.0.0.1:${reg_port}:5000" --name "${reg_name}" \
    -v "$(pwd)"/auth:/auth \
    -e "REGISTRY_AUTH=htpasswd" \
@@ -117,7 +117,7 @@ EOF
 
 # connect the registry to the cluster network
 # (the network may already be connected)
-docker network connect "kind" "${reg_name}" || true
+registry network connect "kind" "${reg_name}" || true
 
 # Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
@@ -138,10 +138,10 @@ EOF
 3. Install tekton [pipeline](https://github.com/tektoncd/pipeline/blob/main/docs/install.md) and create the secret in cluster.
 
 ```bash
-kubectl create secret docker-registry secret-tekton \
-  --docker-username=$TEST_USER \
-  --docker-password=$TEST_PASS \
-  --docker-server=localhost:5000 \
+kubectl create secret registry-registry secret-tekton \
+  --registry-username=$TEST_USER \
+  --registry-password=$TEST_PASS \
+  --registry-server=localhost:5000 \
    --namespace=tekton-pipelines
 ```
 

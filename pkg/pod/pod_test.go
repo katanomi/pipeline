@@ -263,7 +263,7 @@ func TestPodBuild(t *testing.T) {
 					"/tekton/termination",
 					"-step_metadata_dir",
 					"/tekton/run/0/status",
-					"-basic-docker=multi-creds=https://docker.io",
+					"-basic-docker=multi-creds=https://registry.example.com",
 					"-basic-docker=multi-creds=https://us.gcr.io",
 					"-basic-git=multi-creds=github.com",
 					"-basic-git=multi-creds=gitlab.com",
@@ -2304,7 +2304,7 @@ _EOF_
 						Namespace: "default",
 						Annotations: map[string]string{
 							"tekton.dev/docker-0": "https://us.gcr.io",
-							"tekton.dev/docker-1": "https://docker.io",
+							"tekton.dev/docker-1": "https://registry.example.com",
 							"tekton.dev/git-0":    "github.com",
 							"tekton.dev/git-1":    "gitlab.com",
 						}},
@@ -2514,7 +2514,7 @@ debug-fail-continue-heredoc-randomly-generated-mz4c7
 						Namespace: "default",
 						Annotations: map[string]string{
 							"tekton.dev/docker-0": "https://us.gcr.io",
-							"tekton.dev/docker-1": "https://docker.io",
+							"tekton.dev/docker-1": "https://registry.example.com",
 							"tekton.dev/git-0":    "github.com",
 							"tekton.dev/git-1":    "gitlab.com",
 						}},
@@ -2870,7 +2870,7 @@ func TestPodBuildwithSpireEnabled(t *testing.T) {
 						Namespace: "default",
 						Annotations: map[string]string{
 							"tekton.dev/docker-0": "https://us.gcr.io",
-							"tekton.dev/docker-1": "https://docker.io",
+							"tekton.dev/docker-1": "https://registry.example.com",
 							"tekton.dev/git-0":    "github.com",
 							"tekton.dev/git-1":    "gitlab.com",
 						}},

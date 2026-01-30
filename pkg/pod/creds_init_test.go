@@ -98,7 +98,7 @@ func TestCredsInit(t *testing.T) {
 					Namespace: namespace,
 					Annotations: map[string]string{
 						"tekton.dev/docker-0": "https://us.gcr.io",
-						"tekton.dev/docker-1": "https://docker.io",
+						"tekton.dev/docker-1": "https://registry.example.com",
 						"tekton.dev/git-0":    "github.com",
 						"tekton.dev/git-1":    "gitlab.com",
 					},
@@ -112,7 +112,7 @@ func TestCredsInit(t *testing.T) {
 		},
 		envVars: []corev1.EnvVar{},
 		wantArgs: []string{
-			"-basic-docker=my-creds=https://docker.io",
+			"-basic-docker=my-creds=https://registry.example.com",
 			"-basic-docker=my-creds=https://us.gcr.io",
 			"-basic-git=my-creds=github.com",
 			"-basic-git=my-creds=gitlab.com",
@@ -170,7 +170,7 @@ func TestCredsInit(t *testing.T) {
 					Namespace: namespace,
 					Annotations: map[string]string{
 						"tekton.dev/docker-0": "https://us.gcr.io",
-						"tekton.dev/docker-1": "https://docker.io",
+						"tekton.dev/docker-1": "https://registry.example.com",
 						"tekton.dev/git-0":    "github.com",
 						"tekton.dev/git-1":    "gitlab.com",
 					},
@@ -184,7 +184,7 @@ func TestCredsInit(t *testing.T) {
 		},
 		envVars: []corev1.EnvVar{customHomeEnvVar},
 		wantArgs: []string{
-			"-basic-docker=my-creds=https://docker.io",
+			"-basic-docker=my-creds=https://registry.example.com",
 			"-basic-docker=my-creds=https://us.gcr.io",
 			"-basic-git=my-creds=github.com",
 			"-basic-git=my-creds=gitlab.com",
@@ -209,7 +209,7 @@ func TestCredsInit(t *testing.T) {
 					Namespace: namespace,
 					Annotations: map[string]string{
 						"tekton.dev/docker-0": "https://us.gcr.io",
-						"tekton.dev/docker-1": "https://docker.io",
+						"tekton.dev/docker-1": "https://registry.example.com",
 						"tekton.dev/git-0":    "github.com",
 						"tekton.dev/git-1":    "gitlab.com",
 					},
@@ -242,7 +242,7 @@ func TestCredsInit(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					Name:        "foo.bar.com",
 					Namespace:   namespace,
-					Annotations: map[string]string{"tekton.dev/docker-0": "https://docker.io"},
+					Annotations: map[string]string{"tekton.dev/docker-0": "https://registry.example.com"},
 				},
 				Type: "kubernetes.io/basic-auth",
 				Data: map[string][]byte{
@@ -252,7 +252,7 @@ func TestCredsInit(t *testing.T) {
 			},
 		},
 		envVars:  []corev1.EnvVar{},
-		wantArgs: []string{"-basic-docker=foo.bar.com=https://docker.io"},
+		wantArgs: []string{"-basic-docker=foo.bar.com=https://registry.example.com"},
 		wantVolumeMounts: []corev1.VolumeMount{{
 			Name:      "tekton-internal-secret-volume-foo-bar-com-9l9zj",
 			MountPath: "/tekton/creds-secrets/foo.bar.com",

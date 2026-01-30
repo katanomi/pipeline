@@ -54,7 +54,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/ptasci67/example-oci@sha256:053a6cb9f3711d4527dd0d37ac610e8727ec0288a898d5dfbd79b25bcaa29828
+      value: registry.example.com/ptasci67/example-oci@sha256:053a6cb9f3711d4527dd0d37ac610e8727ec0288a898d5dfbd79b25bcaa29828
     - name: name
       value: hello-world
     - name: kind

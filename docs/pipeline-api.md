@@ -4161,7 +4161,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Docker image name.
+<p>registry image name.
 More info: <a href="https://kubernetes.io/docs/concepts/containers/images">https://kubernetes.io/docs/concepts/containers/images</a></p>
 </td>
 </tr>
@@ -13602,7 +13602,7 @@ container images in workload controllers like Deployments and StatefulSets.</p>
 <td>
 <em>(Optional)</em>
 <p>Entrypoint array. Not executed within a shell.
-The docker image&rsquo;s ENTRYPOINT is used if this is not provided.
+The registry image&rsquo;s ENTRYPOINT is used if this is not provided.
 Variable references $(VAR_NAME) are expanded using the Step&rsquo;s environment. If a variable
 cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced
 to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. &ldquo;$$(VAR_NAME)&rdquo; will

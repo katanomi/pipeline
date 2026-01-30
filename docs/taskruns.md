@@ -103,11 +103,11 @@ spec:
     steps:
       - name: build-and-push
         image: gcr.io/kaniko-project/executor:v0.17.1
-        # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
+        # specifying registry_CONFIG is required to allow kaniko to detect registry credential
         workingDir: $(workspaces.source.path)
         env:
-          - name: "DOCKER_CONFIG"
-            value: "/tekton/home/.docker/"
+          - name: "registry_CONFIG"
+            value: "/tekton/home/.registry/"
         command:
           - /kaniko/executor
         args:
@@ -130,7 +130,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog
+      value: registry.example.com/myrepo/mycatalog
     - name: name
       value: echo-task
     - name: kind
@@ -143,7 +143,7 @@ spec:
 spec:
 taskRef:
   name: echo-task
-  bundle: docker.io/myrepo/mycatalog
+  bundle: registry.example.com/myrepo/mycatalog
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -151,7 +151,7 @@ taskRef:
 Here, the `bundle` field is the full reference url to the artifact. The name is the
 `metadata.name` field of the `Task`.
 
-You may also specify a `tag` as you would with a Docker image which will give you a repeatable reference to a `Task`.
+You may also specify a `tag` as you would with a registry image which will give you a repeatable reference to a `Task`.
 
 {{< tabs >}}
 {{% tab "v1 & v1beta1" %}}
@@ -161,7 +161,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog:v1.0.1
+      value: registry.example.com/myrepo/mycatalog:v1.0.1
     - name: name
       value: echo-task
     - name: kind
@@ -174,7 +174,7 @@ spec:
 spec:
 taskRef:
   name: echo-task
-  bundle: docker.io/myrepo/mycatalog:v1.0.1
+  bundle: registry.example.com/myrepo/mycatalog:v1.0.1
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -189,7 +189,7 @@ spec:
     resolver: bundles
     params:
     - name: bundle
-      value: docker.io/myrepo/mycatalog@sha256:abc123
+      value: registry.example.com/myrepo/mycatalog@sha256:abc123
     - name: name
       value: echo-task
     - name: kind
@@ -202,7 +202,7 @@ spec:
 spec:
 taskRef:
   name: echo-task
-  bundle: docker.io/myrepo/mycatalog@sha256:abc123
+  bundle: registry.example.com/myrepo/mycatalog@sha256:abc123
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -831,10 +831,10 @@ podName: status-taskrun-pod
 startTime: "2019-08-12T18:22:51Z"
 steps:
   - container: step-hello
-    imageID: docker-pullable://busybox@sha256:895ab622e92e18d6b461d671081757af7dbaa3b00e3e28e12505af7817f73649
+    imageID: registry-pullable://busybox@sha256:895ab622e92e18d6b461d671081757af7dbaa3b00e3e28e12505af7817f73649
     name: hello
     terminated:
-      containerID: docker://d5a54f5bbb8e7a6fd3bc7761b78410403244cf4c9c5822087fb0209bf59e3621
+      containerID: registry://d5a54f5bbb8e7a6fd3bc7761b78410403244cf4c9c5822087fb0209bf59e3621
       exitCode: 0
       finishedAt: "2019-08-12T18:22:56Z"
       reason: Completed
@@ -1038,10 +1038,10 @@ spec:
       - name: build-and-push
         image: gcr.io/kaniko-project/executor:v0.17.1
         workingDir: $(workspaces.source.path)
-        # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
+        # specifying registry_CONFIG is required to allow kaniko to detect registry credential
         env:
-          - name: "DOCKER_CONFIG"
-            value: "/tekton/home/.docker/"
+          - name: "registry_CONFIG"
+            value: "/tekton/home/.registry/"
         command:
           - /kaniko/executor
         args:

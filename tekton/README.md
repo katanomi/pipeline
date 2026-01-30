@@ -156,7 +156,7 @@ gcloud iam service-accounts keys create $KEY_FILE --iam-account $GCP_ACCOUNT
 # 2. Create kubernetes secret, which we will use via a service account and directly mounting
 kubectl create secret generic $GENERIC_SECRET --from-file=./$KEY_FILE
 
-# 3. Add the docker secret to the service account
+# 3. Add the registry secret to the service account
 kubectl apply -f tekton/account.yaml
 kubectl patch serviceaccount $ACCOUNT \
   -p "{\"secrets\": [{\"name\": \"$GENERIC_SECRET\"}]}"
@@ -203,7 +203,7 @@ need an image which contains:
 - `gcloud` - Required to auth with default namespace credentials
 
 The image which we use for this is built from
-[tekton/ko/Dockerfile](./ko/Dockerfile).
+[tekton/ko/registryfile](./ko/registryfile).
 
 _[go-containerregistry#383](https://github.com/google/go-containerregistry/issues/383)
 is about publishing a `ko` image, which hopefully we'll be able to move it._

@@ -486,7 +486,7 @@ spec:
       serviceAccountName: gitea-memcached
       containers:
         - name: memcached
-          image: docker.io/bitnami/memcached:1.6.9-debian-10-r114
+          image: registry.example.com/bitnami/memcached:1.6.9-debian-10-r114
           imagePullPolicy: "IfNotPresent"
           args:
             - /run.sh
@@ -572,7 +572,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: gitea-postgresql
-          image: docker.io/bitnami/postgresql:11.11.0-debian-10-r62
+          image: registry.example.com/bitnami/postgresql:11.11.0-debian-10-r62
           imagePullPolicy: "IfNotPresent"
           resources:
             requests:
